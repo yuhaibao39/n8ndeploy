@@ -3,46 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我爱中国</title>
+    <title>我爱北京天安门</title>
     <style>
         body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background-image: url('https://images.unsplash.com/photo-1562942657-0074b2d051b3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80');
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: #fff;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background-color: #f0f0f0;
         }
-        h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
-        }
-        .content {
+        header {
+            background-color: #c21f30;
+            color: white;
             text-align: center;
-            background-color: rgba(0,0,0,0.6);
-            padding: 20px;
-            border-radius: 10px;
+            padding: 1em;
         }
-        .flower {
-            font-size: 2em;
-            margin: 10px 0;
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2em;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 1em auto;
+        }
+        footer {
+            text-align: center;
+            padding: 1em;
+            background-color: #c21f30;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <div class="content">
-        <h1>我爱中国</h1>
-        <p>祖国的大地上，处处繁花似锦</p>
-        <div class="flower">🌺🌸🌼🌹</div>
-        <p>天安门广场，见证着祖国的荣耀</p>
-        <p>让我们共同守护这片美丽的土地</p>
-    </div>
+    <header>
+        <h1>我爱北京天安门</h1>
+    </header>
+    <main>
+        <h2>天安门简介</h2>
+        <p>天安门，坐落在中华人民共和国首都北京市中心，故宫紫禁城南端，与天安门广场隔长安街相望，是明清两代北京皇城的大门。</p>
+        <img src="https://example.com/tiananmen.jpg" alt="天安门照片">
+        <h2>天安门的历史</h2>
+        <p>天安门始建于明朝永乐十五年（1417年），原名"承天门"，寓意皇帝受命于天、承天而治。清朝顺治八年（1651年）更名为天安门。</p>
+        <h2>天安门的象征意义</h2>
+        <p>天安门是中华人民共和国的国家象征，也是世界上最大的城门，象征着新中国的诞生和繁荣昌盛。</p>
+    </main>
+    <footer>
+        <p>&copy; 2023 我爱北京天安门 | 版权所有</p>
+    </footer>
 </body>
 </html>
