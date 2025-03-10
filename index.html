@@ -3,61 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我爱中国</title>
+    <title>我爱AWS</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: #f0f0f0;
         }
-        .container {
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 40px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        header {
+            background-color: #232f3e;
+            color: white;
             text-align: center;
+            padding: 1em;
+        }
+        main {
+            max-width: 800px;
+            margin: 2em auto;
+            padding: 1em;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         h1 {
-            color: #e60000;
-            font-size: 36px;
-            margin-bottom: 20px;
+            color: #ff9900;
         }
-        .flag {
-            width: 200px;
-            height: 133px;
-            background-color: #e60000;
-            position: relative;
-            margin: 0 auto 20px;
+        .service {
+            margin-bottom: 1em;
+            padding: 1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
-        .star {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 40px;
-            height: 40px;
-            background-color: #ffde00;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-        }
-        p {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #333;
+        footer {
+            background-color: #232f3e;
+            color: white;
+            text-align: center;
+            padding: 1em;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>我爱中国</h1>
-        <div class="flag">
-            <div class="star"></div>
+    <header>
+        <h1>我爱AWS</h1>
+    </header>
+    <main>
+        <h2>AWS热门服务</h2>
+        <div class="service">
+            <h3>Amazon EC2</h3>
+            <p>可扩展的云中虚拟服务器</p>
         </div>
-        <p>中国，一个有着五千年文明历史的伟大国家。</p>
-        <p>我为能成为中国人而自豪，我爱我的祖国！</p>
-    </div>
+        <div class="service">
+            <h3>Amazon S3</h3>
+            <p>可扩展的云存储</p>
+        </div>
+        <div class="service">
+            <h3>Amazon RDS</h3>
+            <p>适用于 MySQL、PostgreSQL、Oracle、SQL Server 和 MariaDB 的托管关系数据库服务</p>
+        </div>
+        <div class="service">
+            <h3>AWS Lambda</h3>
+            <p>无需考虑服务器即可运行代码</p>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2023 我爱AWS. 保留所有权利。</p>
+    </footer>
 </body>
 </html>
