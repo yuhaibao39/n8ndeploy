@@ -3,45 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>中国在哪里？</title>
+    <title>博思云为科技 - 创新技术解决方案</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
+            padding: 0;
+            line-height: 1.6;
         }
-        .container {
-            max-width: 800px;
+        header {
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+        nav {
+            background-color: #2980b9;
+            padding: 0.5rem;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 1rem;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        main {
+            max-width: 1200px;
             margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 2rem;
         }
-        h1 {
-            color: #333;
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
         }
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 20px auto;
+        .services {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .service {
+            flex-basis: calc(33.33% - 1rem);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        footer {
+            background-color: #34495e;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>中国在哪里？</h1>
-        <p>中国位于亚洲东部，太平洋西岸。它是世界上面积第三大的国家，仅次于俄罗斯和加拿大。</p>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/China_in_Asia_%28de-facto%29.svg/800px-China_in_Asia_%28de-facto%29.svg.png" alt="中国在亚洲的位置">
-        <p>中国的地理坐标大致为：</p>
+    <header>
+        <h1>博思云为科技</h1>
+    </header>
+    <nav>
         <ul>
-            <li>北纬 18° 至 53°</li>
-            <li>东经 73° 至 135°</li>
+            <li><a href="#home">首页</a></li>
+            <li><a href="#services">服务</a></li>
+            <li><a href="#about">关于我们</a></li>
+            <li><a href="#contact">联系我们</a></li>
         </ul>
-        <p>中国与14个国家接壤，包括：朝鲜、俄罗斯、蒙古、哈萨克斯坦、吉尔吉斯斯坦、塔吉克斯坦、阿富汗、巴基斯坦、印度、尼泊尔、不丹、缅甸、老挝和越南。</p>
-    </div>
+    </nav>
+    <main>
+        <section id="home" class="hero">
+            <h2>创新技术解决方案</h2>
+            <p>博思云为科技致力于为企业提供先进的云计算和人工智能解决方案</p>
+        </section>
+        <section id="services" class="services">
+            <div class="service">
+                <h3>云计算服务</h3>
+                <p>提供高效、安全、可扩展的云计算解决方案</p>
+            </div>
+            <div class="service">
+                <h3>人工智能应用</h3>
+                <p>开发和部署智能化应用，助力企业数字化转型</p>
+            </div>
+            <div class="service">
+                <h3>大数据分析</h3>
+                <p>利用先进的数据分析技术，挖掘数据价值</p>
+            </div>
+        </section>
+        <section id="about">
+            <h2>关于我们</h2>
+            <p>博思云为科技是一家专注于云计算和人工智能技术的创新企业，我们致力于为客户提供最前沿的技术解决方案，助力企业实现数字化转型。</p>
+        </section>
+        <section id="contact">
+            <h2>联系我们</h2>
+            <p>电话：400-123-4567</p>
+            <p>邮箱：info@bosiyunwei.com</p>
+            <p>地址：北京市海淀区科技园区888号</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 博思云为科技. 保留所有权利。</p>
+    </footer>
 </body>
 </html>
