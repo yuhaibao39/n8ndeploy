@@ -3,59 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我爱博思 - 主页</title>
+    <title>淘宝 - 购物首选</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
         }
         header {
-            background-color: #3498db;
+            background-color: #ff6a00;
+            padding: 10px 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .logo {
             color: white;
-            text-align: center;
-            padding: 1em;
-        }
-        main {
-            max-width: 800px;
-            margin: 2em auto;
-            padding: 1em;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #2c3e50;
-        }
-        .cta-button {
-            display: inline-block;
-            background-color: #e74c3c;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
+            font-size: 24px;
             font-weight: bold;
-            margin-top: 1em;
+        }
+        .search-bar {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+        .search-bar input {
+            width: 500px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ff6a00;
+            border-right: none;
+        }
+        .search-bar button {
+            padding: 10px 20px;
+            background-color: #ff6a00;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .product-card {
+            background-color: white;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+        }
+        .product-card h3 {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .product-card p {
+            color: #ff6a00;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>欢迎来到我爱博思</h1>
+        <div class="container">
+            <div class="logo">淘宝</div>
+        </div>
     </header>
-    <main>
-        <h2>关于我们</h2>
-        <p>我爱博思是一个致力于提供高质量思考和学习资源的平台。我们相信，通过深度思考和持续学习，每个人都能够不断成长和进步。</p>
-        <h2>我们的服务</h2>
-        <ul>
-            <li>在线课程</li>
-            <li>思考工具</li>
-            <li>读书会</li>
-            <li>专家讲座</li>
-        </ul>
-        <h2>加入我们</h2>
-        <p>想要提升你的思考能力和知识储备吗？现在就加入我爱博思，开启你的智慧之旅！</p>
-        <a href="#" class="cta-button">立即注册</a>
+    <main class="container">
+        <div class="search-bar">
+            <input type="text" placeholder="搜索商品">
+            <button>搜索</button>
+        </div>
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="https://via.placeholder.com/150" alt="商品1">
+                <h3>商品1</h3>
+                <p>¥99.00</p>
+            </div>
+            <div class="product-card">
+                <img src="https://via.placeholder.com/150" alt="商品2">
+                <h3>商品2</h3>
+                <p>¥199.00</p>
+            </div>
+            <div class="product-card">
+                <img src="https://via.placeholder.com/150" alt="商品3">
+                <h3>商品3</h3>
+                <p>¥299.00</p>
+            </div>
+            <div class="product-card">
+                <img src="https://via.placeholder.com/150" alt="商品4">
+                <h3>商品4</h3>
+                <p>¥399.00</p>
+            </div>
+            <div class="product-card">
+                <img src="https://via.placeholder.com/150" alt="商品5">
+                <h3>商品5</h3>
+                <p>¥499.00</p>
+            </div>
+            <div class="product-card">
+                <img src="https://via.placeholder.com/150" alt="商品6">
+                <h3>商品6</h3>
+                <p>¥599.00</p>
+            </div>
+        </div>
     </main>
 </body>
 </html>
