@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XPeng系统 - 智能汽车操作系统</title>
+    <title>小鹏汽车参观系统</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,45 +23,70 @@
             max-width: 800px;
             margin: 0 auto;
         }
-        h1 {
-            color: #2c3e50;
-        }
-        .feature {
+        form {
             background-color: #fff;
+            padding: 2rem;
             border-radius: 5px;
-            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 0.5rem;
             margin-bottom: 1rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        button {
+            background-color: #333;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>XPeng智能汽车操作系统</h1>
+        <h1>小鹏汽车参观系统</h1>
     </header>
     <main>
-        <section>
-            <h2>关于XPeng系统</h2>
-            <p>XPeng系统是小鹏汽车自主研发的智能汽车操作系统，为用户提供卓越的驾驶体验和智能互联功能。</p>
-        </section>
-        <section>
-            <h2>主要特点</h2>
-            <div class="feature">
-                <h3>智能语音交互</h3>
-                <p>通过先进的语音识别技术，实现自然流畅的人车对话。</p>
-            </div>
-            <div class="feature">
-                <h3>自动驾驶辅助</h3>
-                <p>集成多种传感器和AI算法，提供安全可靠的自动驾驶辅助功能。</p>
-            </div>
-            <div class="feature">
-                <h3>车载娱乐系统</h3>
-                <p>丰富的多媒体功能，支持音乐、视频播放和在线娱乐服务。</p>
-            </div>
-        </section>
+        <form>
+            <h2>预约参观</h2>
+            <label for="name">姓名：</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="phone">电话：</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <label for="email">电子邮箱：</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="date">参观日期：</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="time">参观时间：</label>
+            <select id="time" name="time" required>
+                <option value="">请选择时间段</option>
+                <option value="morning">上午 (9:00 - 12:00)</option>
+                <option value="afternoon">下午 (14:00 - 17:00)</option>
+            </select>
+
+            <label for="visitors">参观人数：</label>
+            <input type="number" id="visitors" name="visitors" min="1" max="10" required>
+
+            <label for="message">其他备注：</label>
+            <textarea id="message" name="message" rows="4"></textarea>
+
+            <button type="submit">提交预约</button>
+        </form>
     </main>
-    <footer>
-        <p>&copy; 2023 XPeng智能汽车系统. 保留所有权利。</p>
-    </footer>
 </body>
 </html>
