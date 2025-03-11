@@ -3,130 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>观测云 - 全栈可观测性平台</title>
+    <title>登录</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f2f5;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        header {
-            background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 20px 0;
-        }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-        }
-        nav {
-            float: right;
-        }
-        nav a {
-            margin-left: 20px;
-            text-decoration: none;
-            color: #333;
-        }
-        .hero {
-            text-align: center;
-            padding: 80px 0;
-        }
-        .hero h1 {
-            font-size: 48px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        .hero p {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 40px;
-        }
-        .cta-button {
-            display: inline-block;
-            background-color: #1890ff;
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .features {
+            background-color: #f0f0f0;
             display: flex;
-            justify-content: space-between;
-            margin-top: 80px;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-        .feature {
-            flex-basis: 30%;
+        .login-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
             text-align: center;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .feature h3 {
-            font-size: 24px;
             color: #333;
-            margin-bottom: 10px;
         }
-        .feature p {
-            font-size: 16px;
-            color: #666;
+        form {
+            display: flex;
+            flex-direction: column;
         }
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 80px;
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="logo">观测云</div>
-            <nav>
-                <a href="#features">功能</a>
-                <a href="#pricing">价格</a>
-                <a href="#contact">联系我们</a>
-            </nav>
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="hero">
-            <h1>全栈可观测性平台</h1>
-            <p>提供全面的应用性能监控、日志管理和分布式追踪解决方案</p>
-            <a href="#" class="cta-button">立即试用</a>
-        </div>
-
-        <div class="features">
-            <div class="feature">
-                <h3>应用性能监控</h3>
-                <p>实时监控应用性能，快速定位并解决问题</p>
-            </div>
-            <div class="feature">
-                <h3>日志管理</h3>
-                <p>集中管理和分析日志，提取有价值的信息</p>
-            </div>
-            <div class="feature">
-                <h3>分布式追踪</h3>
-                <p>追踪分布式系统中的请求流程，优化系统性能</p>
-            </div>
-        </div>
+    <div class="login-container">
+        <h1>登录</h1>
+        <form>
+            <input type="text" placeholder="用户名" required>
+            <input type="password" placeholder="密码" required>
+            <button type="submit">登录</button>
+        </form>
     </div>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2023 观测云. 保留所有权利。</p>
-        </div>
-    </footer>
 </body>
 </html>
