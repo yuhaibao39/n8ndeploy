@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XPeng访客系统</title>
+    <title>XPeng Visit System</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,10 +33,7 @@
             display: block;
             margin-bottom: 0.5rem;
         }
-        input[type="text"],
-        input[type="tel"],
-        input[type="email"],
-        select {
+        input, select, textarea {
             width: 100%;
             padding: 0.5rem;
             margin-bottom: 1rem;
@@ -58,35 +55,39 @@
 </head>
 <body>
     <header>
-        <h1>XPeng访客系统</h1>
+        <h1>XPeng Visit System</h1>
     </header>
     <main>
-        <form>
-            <label for="name">姓名：</label>
+        <form action="#" method="post">
+            <h2>Schedule a Visit</h2>
+            <label for="name">Full Name:</label>
             <input type="text" id="name" name="name" required>
 
-            <label for="phone">电话：</label>
-            <input type="tel" id="phone" name="phone" required>
-
-            <label for="email">邮箱：</label>
+            <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
 
-            <label for="company">公司：</label>
-            <input type="text" id="company" name="company">
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" required>
 
-            <label for="visit-purpose">访问目的：</label>
-            <select id="visit-purpose" name="visit-purpose" required>
-                <option value="">请选择</option>
-                <option value="meeting">会议</option>
-                <option value="interview">面试</option>
-                <option value="business">商务洽谈</option>
-                <option value="other">其他</option>
+            <label for="visit-date">Preferred Visit Date:</label>
+            <input type="date" id="visit-date" name="visit-date" required>
+
+            <label for="visit-time">Preferred Visit Time:</label>
+            <input type="time" id="visit-time" name="visit-time" required>
+
+            <label for="visit-reason">Reason for Visit:</label>
+            <select id="visit-reason" name="visit-reason" required>
+                <option value="">Select a reason</option>
+                <option value="test-drive">Test Drive</option>
+                <option value="sales-inquiry">Sales Inquiry</option>
+                <option value="service">Service Appointment</option>
+                <option value="other">Other</option>
             </select>
 
-            <label for="host">接待人：</label>
-            <input type="text" id="host" name="host" required>
+            <label for="comments">Additional Comments:</label>
+            <textarea id="comments" name="comments" rows="4"></textarea>
 
-            <button type="submit">提交</button>
+            <button type="submit">Schedule Visit</button>
         </form>
     </main>
 </body>
