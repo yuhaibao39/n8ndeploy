@@ -3,86 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XPeng访客系统</title>
+    <title>XPeng登录</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
         }
-        header {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 1rem;
-        }
-        main {
+        .login-container {
+            background-color: white;
             padding: 2rem;
-            max-width: 800px;
-            margin: 0 auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1E90FF;
+            text-align: center;
+            margin-bottom: 1.5rem;
         }
         form {
-            background-color: #fff;
-            padding: 2rem;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
         }
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        input, select {
-            width: 100%;
-            padding: 0.5rem;
+        input {
             margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 3px;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
         button {
-            background-color: #333;
-            color: #fff;
-            padding: 0.5rem 1rem;
+            background-color: #1E90FF;
+            color: white;
+            padding: 0.5rem;
             border: none;
-            border-radius: 3px;
+            border-radius: 4px;
             cursor: pointer;
         }
         button:hover {
-            background-color: #555;
+            background-color: #0000FF;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>XPeng访客系统</h1>
-    </header>
-    <main>
-        <form action="#" method="post">
-            <h2>访客登记</h2>
-            <label for="name">姓名：</label>
-            <input type="text" id="name" name="name" required>
-            
-            <label for="id">身份证号：</label>
-            <input type="text" id="id" name="id" required>
-            
-            <label for="phone">手机号码：</label>
-            <input type="tel" id="phone" name="phone" required>
-            
-            <label for="purpose">来访目的：</label>
-            <select id="purpose" name="purpose" required>
-                <option value="">请选择</option>
-                <option value="business">商务洽谈</option>
-                <option value="interview">面试</option>
-                <option value="visit">参观</option>
-                <option value="other">其他</option>
-            </select>
-            
-            <label for="host">接待人：</label>
-            <input type="text" id="host" name="host" required>
-            
-            <button type="submit">提交</button>
+    <div class="login-container">
+        <h1>XPeng登录</h1>
+        <form>
+            <input type="text" placeholder="用户名" required>
+            <input type="password" placeholder="密码" required>
+            <button type="submit">登录</button>
         </form>
-    </main>
+    </div>
 </body>
 </html>
