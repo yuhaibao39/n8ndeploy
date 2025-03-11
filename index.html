@@ -1,57 +1,88 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workflow Details</title>
+    <title>XPeng访客系统</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             background-color: #f4f4f4;
         }
-        .container {
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+        }
+        main {
+            padding: 2rem;
             max-width: 800px;
             margin: 0 auto;
+        }
+        form {
             background-color: #fff;
-            padding: 20px;
+            padding: 2rem;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        h1 {
-            color: #333;
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
         }
-        .workflow-link {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 15px;
-            background-color: #007bff;
+        input, select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        button {
+            background-color: #333;
             color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
         }
-        .workflow-link:hover {
-            background-color: #0056b3;
+        button:hover {
+            background-color: #555;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Workflow Information</h1>
-        </header>
-        <main>
-            <p>You have requested information about a specific workflow. The workflow ID is:</p>
-            <code>9ksXWz6oCpIt1J5q</code>
-            <p>To view or manage this workflow, please use the link below:</p>
-            <a href="http://52.24.202.126:5678/workflow/9ksXWz6oCpIt1J5q" class="workflow-link">Access Workflow</a>
-        </main>
-        <footer>
-            <p>For any issues or questions, please contact the system administrator.</p>
-        </footer>
-    </div>
+    <header>
+        <h1>XPeng访客系统</h1>
+    </header>
+    <main>
+        <form action="#" method="post">
+            <h2>访客登记</h2>
+            <label for="name">姓名：</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="id">身份证号：</label>
+            <input type="text" id="id" name="id" required>
+            
+            <label for="phone">手机号码：</label>
+            <input type="tel" id="phone" name="phone" required>
+            
+            <label for="purpose">来访目的：</label>
+            <select id="purpose" name="purpose" required>
+                <option value="">请选择</option>
+                <option value="business">商务洽谈</option>
+                <option value="interview">面试</option>
+                <option value="visit">参观</option>
+                <option value="other">其他</option>
+            </select>
+            
+            <label for="host">接待人：</label>
+            <input type="text" id="host" name="host" required>
+            
+            <button type="submit">提交</button>
+        </form>
+    </main>
 </body>
 </html>
