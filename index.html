@@ -1,44 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I love China</title>
+    <title>百度一下，你就知道</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
         }
-        .container {
+        header {
+            text-align: right;
+            padding: 20px;
+        }
+        .logo {
             text-align: center;
-            background-color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 100px;
         }
-        h1 {
-            color: #d81e06;
+        .search-box {
+            text-align: center;
+            margin-top: 30px;
         }
-        p {
-            color: #333;
+        #search-input {
+            width: 540px;
+            height: 40px;
+            padding: 0 10px;
+            font-size: 16px;
+            border: 2px solid #4e6ef2;
+            border-radius: 10px 0 0 10px;
+            outline: none;
         }
-        img {
-            max-width: 200px;
-            margin-top: 1rem;
+        #search-button {
+            width: 100px;
+            height: 44px;
+            background-color: #4e6ef2;
+            color: white;
+            border: none;
+            border-radius: 0 10px 10px 0;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 12px;
+            color: #999;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>I love China</h1>
-        <p>China is a beautiful country with a rich history and culture.</p>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Flag_of_the_People%27s_Republic_of_China.svg/1200px-Flag_of_the_People%27s_Republic_of_China.svg.png" alt="Chinese Flag">
-    </div>
+    <header>
+        <a href="#">新闻</a> |
+        <a href="#">hao123</a> |
+        <a href="#">地图</a> |
+        <a href="#">视频</a> |
+        <a href="#">贴吧</a> |
+        <a href="#">登录</a>
+    </header>
+    <main>
+        <div class="logo">
+            <img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" alt="百度logo">
+        </div>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="请输入搜索内容">
+            <button id="search-button">百度一下</button>
+        </div>
+    </main>
+    <footer>
+        <p>©2023 Baidu 使用百度前必读 意见反馈 京ICP证030173号 京公网安备11000002000001号</p>
+    </footer>
 </body>
 </html>
