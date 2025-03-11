@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小鹏汽车参观系统</title>
+    <title>XPeng访客系统</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,7 +33,7 @@
             display: block;
             margin-bottom: 0.5rem;
         }
-        input, select, textarea {
+        input, select {
             width: 100%;
             padding: 0.5rem;
             margin-bottom: 1rem;
@@ -55,37 +55,36 @@
 </head>
 <body>
     <header>
-        <h1>小鹏汽车参观系统</h1>
+        <h1>XPeng访客系统</h1>
     </header>
     <main>
-        <form>
-            <h2>预约参观</h2>
+        <form action="#" method="post">
+            <h2>访客登记</h2>
             <label for="name">姓名：</label>
             <input type="text" id="name" name="name" required>
-
-            <label for="phone">电话：</label>
+            
+            <label for="id">身份证号：</label>
+            <input type="text" id="id" name="id" required>
+            
+            <label for="phone">手机号：</label>
             <input type="tel" id="phone" name="phone" required>
-
-            <label for="email">电子邮箱：</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="date">参观日期：</label>
-            <input type="date" id="date" name="date" required>
-
-            <label for="time">参观时间：</label>
-            <select id="time" name="time" required>
-                <option value="">请选择时间段</option>
-                <option value="morning">上午 (9:00 - 12:00)</option>
-                <option value="afternoon">下午 (14:00 - 17:00)</option>
+            
+            <label for="purpose">来访目的：</label>
+            <select id="purpose" name="purpose" required>
+                <option value="">请选择</option>
+                <option value="meeting">会议</option>
+                <option value="interview">面试</option>
+                <option value="business">商务洽谈</option>
+                <option value="other">其他</option>
             </select>
-
-            <label for="visitors">参观人数：</label>
-            <input type="number" id="visitors" name="visitors" min="1" max="10" required>
-
-            <label for="message">其他备注：</label>
-            <textarea id="message" name="message" rows="4"></textarea>
-
-            <button type="submit">提交预约</button>
+            
+            <label for="host">接待人：</label>
+            <input type="text" id="host" name="host" required>
+            
+            <label for="visit-time">来访时间：</label>
+            <input type="datetime-local" id="visit-time" name="visit-time" required>
+            
+            <button type="submit">提交</button>
         </form>
     </main>
 </body>
