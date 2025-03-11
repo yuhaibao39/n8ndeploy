@@ -3,75 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>百度一下，你就知道</title>
+    <title>博思云为科技 - 创新科技解决方案</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
         }
         header {
-            text-align: right;
-            padding: 20px;
-        }
-        .logo {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 1rem;
             text-align: center;
-            margin-top: 100px;
         }
-        .search-box {
+        nav {
+            background-color: #34495e;
+            padding: 0.5rem;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 1rem;
+        }
+        nav ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+        }
+        main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .hero {
+            background-color: #3498db;
+            color: #ffffff;
+            padding: 3rem;
             text-align: center;
-            margin-top: 30px;
+            margin-bottom: 2rem;
         }
-        #search-input {
-            width: 540px;
-            height: 40px;
-            padding: 0 10px;
-            font-size: 16px;
-            border: 2px solid #4e6ef2;
-            border-radius: 10px 0 0 10px;
-            outline: none;
+        .features {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
         }
-        #search-button {
-            width: 100px;
-            height: 44px;
-            background-color: #4e6ef2;
-            color: white;
-            border: none;
-            border-radius: 0 10px 10px 0;
-            font-size: 16px;
-            cursor: pointer;
+        .feature {
+            flex-basis: calc(33.33% - 1rem);
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: #f1f1f1;
+            border-radius: 5px;
         }
         footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            background-color: #2c3e50;
+            color: #ecf0f1;
             text-align: center;
-            padding: 20px 0;
-            font-size: 12px;
-            color: #999;
+            padding: 1rem;
+            margin-top: 2rem;
         }
     </style>
 </head>
 <body>
     <header>
-        <a href="#">新闻</a> |
-        <a href="#">hao123</a> |
-        <a href="#">地图</a> |
-        <a href="#">视频</a> |
-        <a href="#">贴吧</a> |
-        <a href="#">登录</a>
+        <h1>博思云为科技</h1>
     </header>
+    <nav>
+        <ul>
+            <li><a href="#home">首页</a></li>
+            <li><a href="#about">关于我们</a></li>
+            <li><a href="#services">服务</a></li>
+            <li><a href="#products">产品</a></li>
+            <li><a href="#contact">联系我们</a></li>
+        </ul>
+    </nav>
     <main>
-        <div class="logo">
-            <img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" alt="百度logo">
-        </div>
-        <div class="search-box">
-            <input type="text" id="search-input" placeholder="请输入搜索内容">
-            <button id="search-button">百度一下</button>
-        </div>
+        <section class="hero">
+            <h2>创新科技解决方案</h2>
+            <p>博思云为科技致力于为企业提供最前沿的技术服务和解决方案</p>
+        </section>
+        <section class="features">
+            <div class="feature">
+                <h3>云计算服务</h3>
+                <p>提供高性能、安全可靠的云计算基础设施和服务</p>
+            </div>
+            <div class="feature">
+                <h3>人工智能解决方案</h3>
+                <p>运用先进的AI技术，为各行各业提供智能化升级方案</p>
+            </div>
+            <div class="feature">
+                <h3>大数据分析</h3>
+                <p>帮助企业挖掘数据价值，实现数据驱动的决策</p>
+            </div>
+        </section>
+        <section id="about">
+            <h2>关于博思云为</h2>
+            <p>博思云为科技是一家专注于提供创新科技解决方案的高新技术企业。我们拥有一支经验丰富的技术团队，致力于为客户提供最优质的服务。</p>
+        </section>
     </main>
     <footer>
-        <p>©2023 Baidu 使用百度前必读 意见反馈 京ICP证030173号 京公网安备11000002000001号</p>
+        <p>&copy; 2023 博思云为科技. 保留所有权利。</p>
     </footer>
 </body>
 </html>
