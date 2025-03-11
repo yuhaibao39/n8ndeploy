@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XPeng Visit System</title>
+    <title>XPeng访系统</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,72 +23,48 @@
             max-width: 800px;
             margin: 0 auto;
         }
-        form {
+        h1 {
+            color: #1e90ff;
+        }
+        .system-description {
             background-color: #fff;
-            padding: 2rem;
             border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-        }
-        button {
+        footer {
             background-color: #333;
             color: #fff;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #555;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>XPeng Visit System</h1>
+        <h1>XPeng访系统</h1>
     </header>
     <main>
-        <form action="#" method="post">
-            <h2>Schedule a Visit</h2>
-            <label for="name">Full Name:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="phone">Phone Number:</label>
-            <input type="tel" id="phone" name="phone" required>
-
-            <label for="visit-date">Preferred Visit Date:</label>
-            <input type="date" id="visit-date" name="visit-date" required>
-
-            <label for="visit-time">Preferred Visit Time:</label>
-            <input type="time" id="visit-time" name="visit-time" required>
-
-            <label for="visit-reason">Reason for Visit:</label>
-            <select id="visit-reason" name="visit-reason" required>
-                <option value="">Select a reason</option>
-                <option value="test-drive">Test Drive</option>
-                <option value="sales-inquiry">Sales Inquiry</option>
-                <option value="service">Service Appointment</option>
-                <option value="other">Other</option>
-            </select>
-
-            <label for="comments">Additional Comments:</label>
-            <textarea id="comments" name="comments" rows="4"></textarea>
-
-            <button type="submit">Schedule Visit</button>
-        </form>
+        <section class="system-description">
+            <h2>系统概述</h2>
+            <p>XPeng访系统是一个先进的访客管理解决方案，旨在提高安全性和效率。该系统集成了最新的技术，为用户提供便捷的访客登记、身份验证和访问控制功能。</p>
+        </section>
+        <section class="system-features">
+            <h2>主要功能</h2>
+            <ul>
+                <li>快速访客登记</li>
+                <li>实时身份验证</li>
+                <li>访问权限管理</li>
+                <li>访客数据分析</li>
+                <li>安全报告生成</li>
+            </ul>
+        </section>
     </main>
+    <footer>
+        <p>&copy; 2023 XPeng访系统. 保留所有权利。</p>
+    </footer>
 </body>
 </html>
