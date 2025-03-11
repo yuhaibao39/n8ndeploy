@@ -1,60 +1,59 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登录</title>
+    <title>I love China</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
         }
-        .login-container {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 5px;
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
         h1 {
-            text-align: center;
+            color: #e60000;
+            margin-bottom: 20px;
+        }
+        p {
             color: #333;
+            font-size: 18px;
+            line-height: 1.6;
         }
-        form {
-            display: flex;
-            flex-direction: column;
+        .flag {
+            width: 200px;
+            height: 133px;
+            background-color: #e60000;
+            position: relative;
+            margin: 20px auto;
         }
-        input {
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
+        .star {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #ffde00;
+            font-size: 40px;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h1>登录</h1>
-        <form>
-            <input type="text" placeholder="用户名" required>
-            <input type="password" placeholder="密码" required>
-            <button type="submit">登录</button>
-        </form>
+    <div class="container">
+        <h1>I love China</h1>
+        <div class="flag">
+            <div class="star">★★★★★</div>
+        </div>
+        <p>China is a beautiful country with a rich history and culture. Its diverse landscapes, delicious cuisine, and friendly people make it a truly special place.</p>
     </div>
 </body>
 </html>
