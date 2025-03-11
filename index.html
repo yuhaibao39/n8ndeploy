@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XPeng访客系统</title>
+    <title>XPeng Visitor System</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,13 +24,16 @@
             margin: 0 auto;
         }
         h1 {
-            color: #1e90ff;
+            color: #333;
         }
-        form {
+        .visitor-form {
             background-color: #fff;
             padding: 2rem;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 1rem;
         }
         label {
             display: block;
@@ -41,43 +44,51 @@
         input[type="tel"] {
             width: 100%;
             padding: 0.5rem;
-            margin-bottom: 1rem;
             border: 1px solid #ddd;
             border-radius: 3px;
         }
         button {
-            background-color: #1e90ff;
+            background-color: #333;
             color: #fff;
-            padding: 0.7rem 1.5rem;
+            padding: 0.5rem 1rem;
             border: none;
             border-radius: 3px;
             cursor: pointer;
         }
         button:hover {
-            background-color: #1c7ed6;
+            background-color: #555;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>XPeng访客系统</h1>
+        <h1>XPeng Visitor System</h1>
     </header>
     <main>
-        <form>
-            <label for="name">姓名：</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="email">邮箱：</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="phone">电话：</label>
-            <input type="tel" id="phone" name="phone" required>
-
-            <label for="purpose">来访目的：</label>
-            <input type="text" id="purpose" name="purpose" required>
-
-            <button type="submit">登记</button>
-        </form>
+        <section class="visitor-form">
+            <h2>Visitor Registration</h2>
+            <form>
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="purpose">Purpose of Visit:</label>
+                    <input type="text" id="purpose" name="purpose" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Register</button>
+                </div>
+            </form>
+        </section>
     </main>
 </body>
 </html>
