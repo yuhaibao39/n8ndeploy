@@ -58,7 +58,7 @@
         <h1>XPeng Visitor System</h1>
     </header>
     <main>
-        <form id="visitorForm">
+        <form action="#" method="post">
             <h2>Visitor Registration</h2>
             <label for="name">Full Name:</label>
             <input type="text" id="name" name="name" required>
@@ -69,33 +69,26 @@
             <label for="phone">Phone Number:</label>
             <input type="tel" id="phone" name="phone" required>
 
+            <label for="visit-date">Visit Date:</label>
+            <input type="date" id="visit-date" name="visit-date" required>
+
+            <label for="visit-time">Visit Time:</label>
+            <input type="time" id="visit-time" name="visit-time" required>
+
             <label for="purpose">Purpose of Visit:</label>
             <select id="purpose" name="purpose" required>
                 <option value="">Select a purpose</option>
-                <option value="meeting">Meeting</option>
+                <option value="meeting">Business Meeting</option>
                 <option value="interview">Interview</option>
-                <option value="delivery">Delivery</option>
+                <option value="tour">Facility Tour</option>
                 <option value="other">Other</option>
             </select>
 
-            <label for="host">Host Employee:</label>
+            <label for="host">Host Name:</label>
             <input type="text" id="host" name="host" required>
-
-            <label for="visitDate">Visit Date:</label>
-            <input type="date" id="visitDate" name="visitDate" required>
-
-            <label for="visitTime">Visit Time:</label>
-            <input type="time" id="visitTime" name="visitTime" required>
 
             <button type="submit">Register Visit</button>
         </form>
     </main>
-    <script>
-        document.getElementById('visitorForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Visitor registration submitted successfully!');
-            this.reset();
-        });
-    </script>
 </body>
 </html>
