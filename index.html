@@ -3,52 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>庆祝中国国庆</title>
+    <title>观测云 - 全栈可观测性平台</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
-        }
-        header {
-            background-color: #de2910;
-            color: #ffde00;
-            text-align: center;
-            padding: 20px;
-        }
-        h1 {
-            margin: 0;
+            background-color: #f0f2f5;
         }
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        .flag {
+        header {
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px 0;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        nav {
+            float: right;
+        }
+        nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #333;
+        }
+        .hero {
             text-align: center;
+            padding: 80px 0;
+        }
+        .hero h1 {
             font-size: 48px;
+            color: #333;
             margin-bottom: 20px;
         }
-        .content {
-            text-align: justify;
+        .hero p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #1890ff;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .features {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 80px;
+        }
+        .feature {
+            flex-basis: 30%;
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .feature h3 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .feature p {
+            font-size: 16px;
+            color: #666;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 80px;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>庆祝中国国庆</h1>
+        <div class="container">
+            <div class="logo">观测云</div>
+            <nav>
+                <a href="#features">功能</a>
+                <a href="#pricing">价格</a>
+                <a href="#contact">联系我们</a>
+            </nav>
+        </div>
     </header>
+
     <div class="container">
-        <div class="flag">🇨🇳</div>
-        <div class="content">
-            <h2>欢迎来到国庆庆典页面</h2>
-            <p>每年的10月1日是中华人民共和国国庆节，这是一个举国同庆的重要日子。在这一天，我们纪念中华人民共和国的成立，回顾过去的成就，展望美好的未来。</p>
-            <p>国庆节期间，全国各地都会举行各种庆祝活动，包括升国旗仪式、阅兵式、文艺演出等。人们会在这一天外出游玩，欣赏祖国的大好河山，感受祖国的繁荣发展。</p>
-            <p>让我们一起为伟大的祖国庆生，共同祝愿祖国繁荣昌盛，人民幸福安康！</p>
+        <div class="hero">
+            <h1>全栈可观测性平台</h1>
+            <p>提供全面的应用性能监控、日志管理和分布式追踪解决方案</p>
+            <a href="#" class="cta-button">立即试用</a>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <h3>应用性能监控</h3>
+                <p>实时监控应用性能，快速定位并解决问题</p>
+            </div>
+            <div class="feature">
+                <h3>日志管理</h3>
+                <p>集中管理和分析日志，提取有价值的信息</p>
+            </div>
+            <div class="feature">
+                <h3>分布式追踪</h3>
+                <p>追踪分布式系统中的请求流程，优化系统性能</p>
+            </div>
         </div>
     </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 观测云. 保留所有权利。</p>
+        </div>
+    </footer>
 </body>
 </html>
