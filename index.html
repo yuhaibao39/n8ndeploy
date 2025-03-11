@@ -1,51 +1,95 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我爱中国</title>
+    <title>XPeng Visitor System</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
+            background-color: #f4f4f4;
         }
         header {
-            background-color: #de2910;
-            color: #ffde00;
+            background-color: #333;
+            color: #fff;
             text-align: center;
             padding: 1rem;
         }
         main {
+            padding: 2rem;
             max-width: 800px;
             margin: 0 auto;
+        }
+        form {
+            background-color: #fff;
             padding: 2rem;
-            background-color: #ffffff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        h1 {
-            color: #de2910;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
+        label {
             display: block;
-            margin: 1rem auto;
+            margin-bottom: 0.5rem;
+        }
+        input, select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        button {
+            background-color: #333;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>我爱中国</h1>
+        <h1>XPeng Visitor System</h1>
     </header>
     <main>
-        <h2>中国：一个伟大的国家</h2>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg" alt="中国国旗">
-        <p>中国是一个拥有悠久历史和丰富文化的国家。从古老的长城到现代化的大都市，中国展现了惊人的多样性和活力。</p>
-        <p>作为世界上人口最多的国家，中国在全球舞台上扮演着越来越重要的角色。其经济实力、科技创新和文化影响力正在不断增强。</p>
-        <p>我们为中国的发展成就感到自豪，并期待着她更加美好的未来。</p>
+        <form action="#" method="post">
+            <h2>Visitor Registration</h2>
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <label for="visit-date">Visit Date:</label>
+            <input type="date" id="visit-date" name="visit-date" required>
+
+            <label for="visit-time">Visit Time:</label>
+            <input type="time" id="visit-time" name="visit-time" required>
+
+            <label for="purpose">Purpose of Visit:</label>
+            <select id="purpose" name="purpose" required>
+                <option value="">Select a purpose</option>
+                <option value="meeting">Business Meeting</option>
+                <option value="interview">Interview</option>
+                <option value="tour">Facility Tour</option>
+                <option value="delivery">Delivery</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label for="host">Host Employee:</label>
+            <input type="text" id="host" name="host" required>
+
+            <button type="submit">Register Visit</button>
+        </form>
     </main>
 </body>
 </html>
