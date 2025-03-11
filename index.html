@@ -3,42 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I love China</title>
+    <title>Workflow Details</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            line-height: 1.6;
             margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
+            padding: 20px;
+            background-color: #f4f4f4;
         }
         .container {
-            text-align: center;
-            background-color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         h1 {
-            color: #e60000;
-        }
-        p {
             color: #333;
         }
-        .flag {
-            font-size: 5rem;
-            margin-bottom: 1rem;
+        .workflow-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .workflow-link:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="flag">🇨🇳</div>
-        <h1>I love China</h1>
-        <p>China is a beautiful country with rich history and culture.</p>
+        <header>
+            <h1>Workflow Information</h1>
+        </header>
+        <main>
+            <p>You have requested information about a specific workflow. The workflow ID is:</p>
+            <code>9ksXWz6oCpIt1J5q</code>
+            <p>To view or manage this workflow, please use the link below:</p>
+            <a href="http://52.24.202.126:5678/workflow/9ksXWz6oCpIt1J5q" class="workflow-link">Access Workflow</a>
+        </main>
+        <footer>
+            <p>For any issues or questions, please contact the system administrator.</p>
+        </footer>
     </div>
 </body>
 </html>
