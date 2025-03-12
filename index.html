@@ -58,7 +58,7 @@
         <h1>XPeng Visitor System</h1>
     </header>
     <main>
-        <form>
+        <form id="visitor-form">
             <h2>Visitor Registration</h2>
             <label for="name">Full Name:</label>
             <input type="text" id="name" name="name" required>
@@ -78,7 +78,7 @@
                 <option value="other">Other</option>
             </select>
 
-            <label for="host">Host Employee:</label>
+            <label for="host">Host Name:</label>
             <input type="text" id="host" name="host" required>
 
             <label for="visit-date">Visit Date:</label>
@@ -90,5 +90,12 @@
             <button type="submit">Register Visit</button>
         </form>
     </main>
+    <script>
+        document.getElementById('visitor-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Visitor registration submitted successfully!');
+            this.reset();
+        });
+    </script>
 </body>
 </html>
