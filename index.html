@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>简单访客系统</title>
+    <title>访客登记系统</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,7 +13,7 @@
             background-color: #f4f4f4;
         }
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             background-color: #fff;
             padding: 20px;
@@ -21,20 +21,19 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         h1 {
-            text-align: center;
             color: #333;
+            text-align: center;
         }
         form {
-            margin-bottom: 20px;
+            display: grid;
+            gap: 10px;
         }
         label {
-            display: block;
-            margin-bottom: 5px;
+            font-weight: bold;
         }
-        input[type="text"], input[type="email"], textarea {
+        input, select {
             width: 100%;
             padding: 8px;
-            margin-bottom: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
         }
@@ -45,57 +44,69 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
         }
         button:hover {
             background-color: #45a049;
         }
-        #visitorList {
-            list-style-type: none;
-            padding: 0;
-        }
-        #visitorList li {
-            background-color: #f9f9f9;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 4px;
+        #qrcode {
+            text-align: center;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>访客系统</h1>
+        <h1>访客登记系统</h1>
         <form id="visitorForm">
             <label for="name">姓名：</label>
-            <input type="text" id="name" required>
-            
+            <input type="text" id="name" name="name" required>
+
+            <label for="phone">电话：</label>
+            <input type="tel" id="phone" name="phone" required>
+
             <label for="email">邮箱：</label>
-            <input type="email" id="email" required>
-            
-            <label for="message">留言：</label>
-            <textarea id="message" rows="4" required></textarea>
-            
-            <button type="submit">提交</button>
+            <input type="email" id="email" name="email" required>
+
+            <label for="visitDate">访问日期：</label>
+            <input type="date" id="visitDate" name="visitDate" required>
+
+            <label for="visitTime">访问时间：</label>
+            <input type="time" id="visitTime" name="visitTime" required>
+
+            <label for="purpose">访问目的：</label>
+            <select id="purpose" name="purpose" required>
+                <option value="">请选择</option>
+                <option value="meeting">会议</option>
+                <option value="interview">面试</option>
+                <option value="delivery">送货</option>
+                <option value="other">其他</option>
+            </select>
+
+            <button type="submit">预约登记</button>
         </form>
-        
-        <h2>访客记录</h2>
-        <ul id="visitorList"></ul>
+
+        <div id="qrcode"></div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
         document.getElementById('visitorForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            var name = document.getElementById('name').value;
-            var email = document.getElementById('email').value;
-            var message = document.getElementById('message').value;
-            
-            var listItem = document.createElement('li');
-            listItem.innerHTML = '<strong>' + name + '</strong> (' + email + '): ' + message;
-            
-            document.getElementById('visitorList').appendChild(listItem);
-            
-            // 清空表单
-            this.reset();
+            const formData = new FormData(this);
+            let visitorInfo = '';
+            for (let [key, value] of formData.entries()) {
+                visitorInfo += `${key}: ${value}\n`;
+            }
+
+            const qrcode = new QRCode(document.getElementById("qrcode"), {
+                text: visitorInfo,
+                width: 128,
+                height: 128
+            });
+
+            alert('预约登记成功！请保存生成的二维码。');
         });
     </script>
 </body>
