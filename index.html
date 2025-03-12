@@ -69,27 +69,30 @@
             <label for="phone">Phone Number:</label>
             <input type="tel" id="phone" name="phone" required>
 
-            <label for="company">Company:</label>
-            <input type="text" id="company" name="company">
-
             <label for="purpose">Purpose of Visit:</label>
             <select id="purpose" name="purpose" required>
                 <option value="">Select a purpose</option>
-                <option value="meeting">Business Meeting</option>
+                <option value="meeting">Meeting</option>
                 <option value="interview">Interview</option>
-                <option value="delivery">Delivery</option>
                 <option value="tour">Facility Tour</option>
                 <option value="other">Other</option>
             </select>
 
-            <label for="visitDate">Date of Visit:</label>
-            <input type="date" id="visitDate" name="visitDate" required>
+            <label for="date">Visit Date:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="time">Visit Time:</label>
+            <input type="time" id="time" name="time" required>
 
             <button type="submit">Register Visit</button>
         </form>
     </main>
-    <footer>
-        <p>&copy; 2023 XPeng Visitor System. All rights reserved.</p>
-    </footer>
+    <script>
+        document.getElementById('visitorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Visitor registration submitted successfully!');
+            this.reset();
+        });
+    </script>
 </body>
 </html>
