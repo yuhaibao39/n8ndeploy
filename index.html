@@ -63,10 +63,10 @@
             <label for="name">姓名：</label>
             <input type="text" id="name" name="name" required>
 
-            <label for="phone">手机号码：</label>
+            <label for="phone">电话：</label>
             <input type="tel" id="phone" name="phone" required>
 
-            <label for="email">电子邮箱：</label>
+            <label for="email">邮箱：</label>
             <input type="email" id="email" name="email" required>
 
             <label for="date">预约日期：</label>
@@ -78,10 +78,10 @@
             <label for="purpose">来访目的：</label>
             <select id="purpose" name="purpose" required>
                 <option value="">请选择</option>
-                <option value="会议">会议</option>
-                <option value="面试">面试</option>
-                <option value="咨询">咨询</option>
-                <option value="其他">其他</option>
+                <option value="meeting">会议</option>
+                <option value="interview">面试</option>
+                <option value="visit">参观</option>
+                <option value="other">其他</option>
             </select>
 
             <button type="submit">提交预约</button>
@@ -108,10 +108,11 @@
             qr.make();
 
             // 显示二维码
-            document.getElementById('qrcode').innerHTML = qr.createImgTag();
+            document.getElementById('qrcode').innerHTML = qr.createImgTag(5);
             
-            // 清空表单
-            this.reset();
+            // 这里可以添加将预约信息发送到服务器的代码
+
+            alert('预约成功！请保存二维码。');
         });
     </script>
 </body>
