@@ -3,93 +3,356 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XPENG访问系统</title>
+    <title>XPENG访客管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        .sidebar {
+            min-height: 100vh;
+            background: #343a40;
         }
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            background-color: #f5f5f5;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        header {
-            background-color: #000;
+        .nav-link {
             color: #fff;
-            padding: 1rem;
-            text-align: center;
         }
-        .login-form {
-            max-width: 400px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        .nav-link:hover {
+            color: #f8f9fa;
         }
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-        input {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        .submit-btn {
-            background-color: #1890ff;
-            color: #fff;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 1rem;
-        }
-        .submit-btn:hover {
-            background-color: #096dd9;
+        .nav-link.active {
+            background-color: #495057;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>XPENG访问系统</h1>
-    </header>
-    <main class="container">
-        <section class="login-form">
-            <h2>系统登录</h2>
-            <form action="#" method="POST">
-                <div class="form-group">
-                    <label for="username">用户名</label>
-                    <input type="text" id="username" name="username" required placeholder="请输入用户名">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 左侧菜单 -->
+            <div class="col-md-2 sidebar p-0">
+                <div class="text-center py-4">
+                    <img src="https://via.placeholder.com/150x50" alt="XPENG Logo" class="img-fluid">
                 </div>
-                <div class="form-group">
-                    <label for="password">密码</label>
-                    <input type="password" id="password" name="password" required placeholder="请输入密码">
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="#dashboard" data-bs-toggle="pill">
+                        <i class="bi bi-speedometer2"></i> 数据面板
+                    </a>
+                    <a class="nav-link" href="#visitors" data-bs-toggle="pill">
+                        <i class="bi bi-people"></i> 访客管理
+                    </a>
+                    <a class="nav-link" href="#appointments" data-bs-toggle="pill">
+                        <i class="bi bi-calendar-check"></i> 预约审核
+                    </a>
+                    <a class="nav-link" href="#statistics" data-bs-toggle="pill">
+                        <i class="bi bi-bar-chart"></i> 数据统计
+                    </a>
+                    <a class="nav-link" href="#permissions" data-bs-toggle="pill">
+                        <i class="bi bi-shield-lock"></i> 权限管理
+                    </a>
+                </nav>
+            </div>
+
+            <!-- 右侧内容区 -->
+            <div class="col-md-10 p-4">
+                <div class="tab-content">
+                    <!-- 数据面板 -->
+                    <div class="tab-pane fade show active" id="dashboard">
+                        <h2>数据面板</h2>
+                        <div class="row mt-4">
+                            <div class="col-md-3">
+                                <div class="card text-white bg-primary">
+                                    <div class="card-body">
+                                        <h5 class="card-title">今日访客</h5>
+                                        <p class="card-text display-6">128</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-white bg-success">
+                                    <div class="card-body">
+                                        <h5 class="card-title">待审核预约</h5>
+                                        <p class="card-text display-6">45</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-white bg-warning">
+                                    <div class="card-body">
+                                        <h5 class="card-title">本月访客</h5>
+                                        <p class="card-text display-6">1,234</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-white bg-danger">
+                                    <div class="card-body">
+                                        <h5 class="card-title">系统用户</h5>
+                                        <p class="card-text display-6">56</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 访客管理 -->
+                    <div class="tab-pane fade" id="visitors">
+                        <div class="d-flex justify-content-between mb-4">
+                            <h2>访客管理</h2>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVisitorModal">
+                                <i class="bi bi-plus"></i> 新增访客
+                            </button>
+                        </div>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>访客ID</th>
+                                    <th>姓名</th>
+                                    <th>联系方式</th>
+                                    <th>来访时间</th>
+                                    <th>来访目的</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>V001</td>
+                                    <td>张三</td>
+                                    <td>13800138000</td>
+                                    <td>2024-01-20 09:30</td>
+                                    <td>商务洽谈</td>
+                                    <td><span class="badge bg-success">已通过</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>V002</td>
+                                    <td>李四</td>
+                                    <td>13900139000</td>
+                                    <td>2024-01-20 14:00</td>
+                                    <td>产品体验</td>
+                                    <td><span class="badge bg-warning">待审核</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 预约审核 -->
+                    <div class="tab-pane fade" id="appointments">
+                        <h2>预约审核</h2>
+                        <div class="card mt-4">
+                            <div class="card-body">
+                                <div class="list-group">
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h5>王五 - 产品咨询</h5>
+                                                <p class="mb-1">预约时间：2024-01-21 10:00</p>
+                                                <small>联系方式：13700137000</small>
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-success me-2">通过</button>
+                                                <button class="btn btn-danger">拒绝</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h5>赵六 - 商务合作</h5>
+                                                <p class="mb-1">预约时间：2024-01-21 14:30</p>
+                                                <small>联系方式：13600136000</small>
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-success me-2">通过</button>
+                                                <button class="btn btn-danger">拒绝</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 数据统计 -->
+                    <div class="tab-pane fade" id="statistics">
+                        <h2>数据统计</h2>
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">访客类型分布</h5>
+                                        <canvas id="visitorTypeChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">月度访客趋势</h5>
+                                        <canvas id="monthlyTrendChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 权限管理 -->
+                    <div class="tab-pane fade" id="permissions">
+                        <div class="d-flex justify-content-between mb-4">
+                            <h2>权限管理</h2>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                                <i class="bi bi-person-plus"></i> 添加用户
+                            </button>
+                        </div>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>用户ID</th>
+                                    <th>用户名</th>
+                                    <th>角色</th>
+                                    <th>状态</th>
+                                    <th>最后登录</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1001</td>
+                                    <td>admin</td>
+                                    <td>系统管理员</td>
+                                    <td><span class="badge bg-success">启用</span></td>
+                                    <td>2024-01-20 08:30</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info">编辑</button>
+                                        <button class="btn btn-sm btn-warning">禁用</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>1002</td>
+                                    <td>operator</td>
+                                    <td>操作员</td>
+                                    <td><span class="badge bg-success">启用</span></td>
+                                    <td>2024-01-19 17:45</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info">编辑</button>
+                                        <button class="btn btn-sm btn-warning">禁用</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <button type="submit" class="submit-btn">登录</button>
-                </div>
-            </form>
-        </section>
-    </main>
-    <footer>
-        <div class="container" style="text-align: center; margin-top: 2rem; color: #666;">
-            <p>&copy; 2024 XPENG访问系统 版权所有</p>
+            </div>
         </div>
-    </footer>
+    </div>
+
+    <!-- 新增访客模态框 -->
+    <div class="modal fade" id="addVisitorModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">新增访客</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">姓名</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">联系方式</label>
+                            <input type="tel" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">来访时间</label>
+                            <input type="datetime-local" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">来访目的</label>
+                            <textarea class="form-control"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加用户模态框 -->
+    <div class="modal fade" id="addUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">添加用户</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">用户名</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">密码</label>
+                            <input type="password" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">角色</label>
+                            <select class="form-select">
+                                <option>系统管理员</option>
+                                <option>操作员</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // 初始化图表
+        const visitorTypeChart = new Chart(
+            document.getElementById('visitorTypeChart'),
+            {
+                type: 'pie',
+                data: {
+                    labels: ['商务访客', '产品体验', '合作伙伴', '其他'],
+                    datasets: [{
+                        data: [30, 25, 20, 25],
+                        backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545']
+                    }]
+                }
+            }
+        );
+
+        const monthlyTrendChart = new Chart(
+            document.getElementById('monthlyTrendChart'),
+            {
+                type: 'line',
+                data: {
+                    labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+                    datasets: [{
+                        label: '访客数量',
+                        data: [1200, 1900, 1500, 2000, 1800, 2200],
+                        borderColor: '#007bff'
+                    }]
+                }
+            }
+        );
+    </script>
 </body>
 </html>
