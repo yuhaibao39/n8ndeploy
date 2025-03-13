@@ -78,40 +78,41 @@
             <label for="purpose">来访目的：</label>
             <select id="purpose" name="purpose" required>
                 <option value="">请选择</option>
-                <option value="会议">会议</option>
-                <option value="面试">面试</option>
-                <option value="咨询">咨询</option>
-                <option value="其他">其他</option>
+                <option value="meeting">会议</option>
+                <option value="interview">面试</option>
+                <option value="consultation">咨询</option>
+                <option value="other">其他</option>
             </select>
 
             <button type="submit">提交预约</button>
         </form>
-
         <div id="qrcode"></div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
     <script>
         document.getElementById('appointmentForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // 在实际应用中，这里应该发送表单数据到服务器，并在成功后生成二维码
-            // 这里仅做演示，直接生成二维码
-            
+            // 收集表单数据
             var formData = new FormData(this);
             var appointmentInfo = '';
             for (var pair of formData.entries()) {
                 appointmentInfo += pair[0] + ': ' + pair[1] + '\n';
             }
 
-            document.getElementById('qrcode').innerHTML = '';
-            new QRCode(document.getElementById('qrcode'), {
-                text: appointmentInfo,
-                width: 128,
-                height: 128
-            });
+            // 生成二维码
+            var typeNumber = 0;
+            var errorCorrectionLevel = 'L';
+            var qr = qrcode(typeNumber, errorCorrectionLevel);
+            qr.addData(appointmentInfo);
+            qr.make();
+            document.getElementById('qrcode').innerHTML = qr.createImgTag();
 
-            alert('预约成功！请保存生成的二维码。');
+            // 清空表单
+            this.reset();
+
+            alert('预约成功！请保存二维码。');
         });
     </script>
 </body>
