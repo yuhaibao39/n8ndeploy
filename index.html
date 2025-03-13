@@ -59,28 +59,28 @@
 <body>
     <div class="container">
         <h1>访客预约登记</h1>
-        <form id="visitorForm">
+        <form id="registrationForm">
             <label for="name">姓名：</label>
             <input type="text" id="name" name="name" required>
 
-            <label for="phone">电话：</label>
+            <label for="phone">手机号：</label>
             <input type="tel" id="phone" name="phone" required>
 
             <label for="email">邮箱：</label>
             <input type="email" id="email" name="email" required>
 
-            <label for="visitDate">访问日期：</label>
+            <label for="visitDate">预约日期：</label>
             <input type="date" id="visitDate" name="visitDate" required>
 
-            <label for="visitTime">访问时间：</label>
+            <label for="visitTime">预约时间：</label>
             <input type="time" id="visitTime" name="visitTime" required>
 
-            <label for="purpose">访问目的：</label>
+            <label for="purpose">来访目的：</label>
             <select id="purpose" name="purpose" required>
                 <option value="">请选择</option>
-                <option value="business">商务会议</option>
+                <option value="meeting">会议</option>
                 <option value="interview">面试</option>
-                <option value="personal">个人事务</option>
+                <option value="consultation">咨询</option>
                 <option value="other">其他</option>
             </select>
 
@@ -91,20 +91,24 @@
 
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
     <script>
-        document.getElementById('visitorForm').addEventListener('submit', function(e) {
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const formData = new FormData(this);
-            let registrationInfo = '';
-            for (let [key, value] of formData.entries()) {
-                registrationInfo += `${key}: ${value}\n`;
+            
+            // 在实际应用中，这里应该发送数据到服务器并等待响应
+            // 这里仅作为演示，直接生成二维码
+            
+            var formData = new FormData(this);
+            var qrText = '';
+            for (var pair of formData.entries()) {
+                qrText += pair[0] + ': ' + pair[1] + '\n';
             }
-            
-            const qr = qrcode(0, 'M');
-            qr.addData(registrationInfo);
+
+            var qr = qrcode(0, 'M');
+            qr.addData(qrText);
             qr.make();
-            
-            document.getElementById('qrcode').innerHTML = qr.createImgTag();
-            alert('预约登记成功！请保存生成的二维码。');
+
+            document.getElementById('qrcode').innerHTML = qr.createImgTag(5);
+            alert('预约登记成功！请保存二维码以便入场。');
         });
     </script>
 </body>
