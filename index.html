@@ -1,100 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XPeng Visitor System</title>
+    <title>访客预约登记</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             background-color: #f4f4f4;
         }
-        header {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 1rem;
-        }
-        main {
-            padding: 2rem;
-            max-width: 800px;
+        .container {
+            max-width: 600px;
             margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
         }
         form {
-            background-color: #fff;
-            padding: 2rem;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
         }
         label {
-            display: block;
-            margin-bottom: 0.5rem;
+            margin-top: 10px;
+            font-weight: bold;
         }
         input, select {
-            width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
+            margin-bottom: 15px;
+            padding: 8px;
             border: 1px solid #ddd;
-            border-radius: 3px;
+            border-radius: 4px;
         }
         button {
-            background-color: #333;
-            color: #fff;
-            padding: 0.5rem 1rem;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
             border: none;
-            border-radius: 3px;
+            border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
         }
         button:hover {
-            background-color: #555;
+            background-color: #45a049;
+        }
+        #qrcode {
+            text-align: center;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>XPeng Visitor System</h1>
-    </header>
-    <main>
-        <form id="visitor-form">
-            <h2>Visitor Registration</h2>
-            <label for="name">Full Name:</label>
+    <div class="container">
+        <h1>访客预约登记</h1>
+        <form id="appointmentForm">
+            <label for="name">姓名：</label>
             <input type="text" id="name" name="name" required>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="phone">Phone Number:</label>
+            <label for="phone">电话：</label>
             <input type="tel" id="phone" name="phone" required>
 
-            <label for="purpose">Purpose of Visit:</label>
+            <label for="email">邮箱：</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="date">预约日期：</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="time">预约时间：</label>
+            <input type="time" id="time" name="time" required>
+
+            <label for="purpose">来访目的：</label>
             <select id="purpose" name="purpose" required>
-                <option value="">Select a purpose</option>
-                <option value="meeting">Meeting</option>
-                <option value="interview">Interview</option>
-                <option value="delivery">Delivery</option>
-                <option value="other">Other</option>
+                <option value="">请选择</option>
+                <option value="会议">会议</option>
+                <option value="面试">面试</option>
+                <option value="咨询">咨询</option>
+                <option value="其他">其他</option>
             </select>
 
-            <label for="host">Host Name:</label>
-            <input type="text" id="host" name="host" required>
-
-            <label for="visit-date">Visit Date:</label>
-            <input type="date" id="visit-date" name="visit-date" required>
-
-            <label for="visit-time">Visit Time:</label>
-            <input type="time" id="visit-time" name="visit-time" required>
-
-            <button type="submit">Register Visit</button>
+            <button type="submit">提交预约</button>
         </form>
-    </main>
+
+        <div id="qrcode"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
-        document.getElementById('visitor-form').addEventListener('submit', function(e) {
+        document.getElementById('appointmentForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Visitor registration submitted successfully!');
-            this.reset();
+            
+            // 在实际应用中，这里应该发送表单数据到服务器，并在成功后生成二维码
+            // 这里仅做演示，直接生成二维码
+            
+            var formData = new FormData(this);
+            var appointmentInfo = '';
+            for (var pair of formData.entries()) {
+                appointmentInfo += pair[0] + ': ' + pair[1] + '\n';
+            }
+
+            document.getElementById('qrcode').innerHTML = '';
+            new QRCode(document.getElementById('qrcode'), {
+                text: appointmentInfo,
+                width: 128,
+                height: 128
+            });
+
+            alert('预约成功！请保存生成的二维码。');
         });
     </script>
 </body>
