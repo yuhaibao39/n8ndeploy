@@ -3,336 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>访客系统管理后台</title>
+    <title>访客管理系统</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         .sidebar {
             min-height: 100vh;
-            background-color: #343a40;
+            background: #343a40;
         }
         .nav-link {
             color: #fff;
         }
         .nav-link:hover {
-            color: #f8f9fa;
+            color: #fff;
+            background: #495057;
         }
-        .active {
-            background-color: #495057;
-        }
-        #content {
-            padding: 20px;
-        }
-        .page {
-            display: none;
-        }
-        .page.active {
-            display: block;
+        .nav-link.active {
+            background: #0d6efd;
         }
     </style>
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row">
-        <!-- 左侧菜单 -->
-        <nav class="col-md-2 sidebar p-0">
-            <div class="position-sticky">
-                <div class="p-3 text-white">
-                    <h4>访客系统管理后台</h4>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 左侧菜单 -->
+            <nav class="col-md-2 sidebar p-0">
+                <div class="position-sticky">
+                    <div class="p-3 text-white">
+                        <h4>访客管理系统</h4>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#dashboard" data-bs-toggle="tab">
+                                <i class="bi bi-speedometer2 me-2"></i>数据统计
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#visitors" data-bs-toggle="tab">
+                                <i class="bi bi-people me-2"></i>访客管理
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#appointments" data-bs-toggle="tab">
+                                <i class="bi bi-calendar-check me-2"></i>预约审核
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#permissions" data-bs-toggle="tab">
+                                <i class="bi bi-shield-lock me-2"></i>权限管理
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#" data-page="visitor-list">
-                            <i class="bi bi-people me-2"></i>访客信息管理
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-page="appointment-review">
-                            <i class="bi bi-calendar-check me-2"></i>预约审核
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-page="statistics">
-                            <i class="bi bi-bar-chart me-2"></i>数据统计
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-page="permission">
-                            <i class="bi bi-shield-lock me-2"></i>权限管理
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+            </nav>
 
-        <!-- 右侧内容区 -->
-        <main class="col-md-10">
-            <!-- 访客信息管理 -->
-            <div id="visitor-list" class="page active">
-                <h2 class="mb-4">访客信息管理</h2>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between mb-3">
+            <!-- 右侧内容 -->
+            <main class="col-md-10 ms-sm-auto px-4">
+                <div class="tab-content">
+                    <!-- 数据统计 -->
+                    <div class="tab-pane fade show active" id="dashboard">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">数据统计</h1>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-4">
+                                <div class="card bg-primary text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">今日访客</h5>
+                                        <h2 class="card-text">156</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <div class="card bg-success text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">待审核预约</h5>
+                                        <h2 class="card-text">23</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <div class="card bg-warning text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">本月访客</h5>
+                                        <h2 class="card-text">3,254</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <div class="card bg-info text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">活跃用户</h5>
+                                        <h2 class="card-text">521</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 访客管理 -->
+                    <div class="tab-pane fade" id="visitors">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">访客管理</h1>
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVisitorModal">
                                 <i class="bi bi-plus"></i> 新增访客
                             </button>
-                            <div class="input-group w-25">
-                                <input type="text" class="form-control" placeholder="搜索访客">
-                                <button class="btn btn-outline-secondary"><i class="bi bi-search"></i></button>
-                            </div>
                         </div>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>访客ID</th>
-                                    <th>姓名</th>
-                                    <th>联系方式</th>
-                                    <th>来访时间</th>
-                                    <th>状态</th>
-                                    <th>操作</th>
-                                </tr>
-                            </thead>
-                            <tbody id="visitorTableBody">
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>访客ID</th>
+                                        <th>姓名</th>
+                                        <th>手机号</th>
+                                        <th>来访目的</th>
+                                        <th>来访时间</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>V001</td>
+                                        <td>张三</td>
+                                        <td>13800138000</td>
+                                        <td>商务洽谈</td>
+                                        <td>2024-01-20 09:30</td>
+                                        <td><span class="badge bg-success">已通过</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info">编辑</button>
+                                            <button class="btn btn-sm btn-danger">删除</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>V002</td>
+                                        <td>李四</td>
+                                        <td>13900139000</td>
+                                        <td>面试</td>
+                                        <td>2024-01-20 14:00</td>
+                                        <td><span class="badge bg-warning">待审核</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info">编辑</button>
+                                            <button class="btn btn-sm btn-danger">删除</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- 预约审核 -->
-            <div id="appointment-review" class="page">
-                <h2 class="mb-4">预约审核</h2>
-                <div class="card">
-                    <div class="card-body">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>预约ID</th>
-                                    <th>访客姓名</th>
-                                    <th>预约时间</th>
-                                    <th>来访事由</th>
-                                    <th>状态</th>
-                                    <th>操作</th>
-                                </tr>
-                            </thead>
-                            <tbody id="appointmentTableBody">
-                            </tbody>
-                        </table>
+                    <!-- 预约审核 -->
+                    <div class="tab-pane fade" id="appointments">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">预约审核</h1>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>预约ID</th>
+                                        <th>访客姓名</th>
+                                        <th>预约时间</th>
+                                        <th>来访事由</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>A001</td>
+                                        <td>王五</td>
+                                        <td>2024-01-21 10:00</td>
+                                        <td>项目洽谈</td>
+                                        <td><span class="badge bg-warning">待审核</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-success">通过</button>
+                                            <button class="btn btn-sm btn-danger">拒绝</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- 数据统计 -->
-            <div id="statistics" class="page">
-                <h2 class="mb-4">数据统计</h2>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="card text-white bg-primary">
-                            <div class="card-body">
-                                <h5 class="card-title">今日访客</h5>
-                                <h2 class="card-text">25</h2>
-                            </div>
+                    <!-- 权限管理 -->
+                    <div class="tab-pane fade" id="permissions">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">权限管理</h1>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRoleModal">
+                                <i class="bi bi-plus"></i> 新增角色
+                            </button>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card text-white bg-success">
-                            <div class="card-body">
-                                <h5 class="card-title">本周访客</h5>
-                                <h2 class="card-text">168</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card text-white bg-info">
-                            <div class="card-body">
-                                <h5 class="card-title">待审核</h5>
-                                <h2 class="card-text">12</h2>
-                            </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>角色名称</th>
+                                        <th>描述</th>
+                                        <th>创建时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>管理员</td>
+                                        <td>系统最高权限</td>
+                                        <td>2024-01-01</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info">编辑</button>
+                                            <button class="btn btn-sm btn-danger">删除</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>前台</td>
+                                        <td>访客登记权限</td>
+                                        <td>2024-01-01</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info">编辑</button>
+                                            <button class="btn btn-sm btn-danger">删除</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <canvas id="visitorsChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 权限管理 -->
-            <div id="permission" class="page">
-                <h2 class="mb-4">权限管理</h2>
-                <div class="card">
-                    <div class="card-body">
-                        <button class="btn btn-primary mb-3">
-                            <i class="bi bi-person-plus"></i> 新增用户
-                        </button>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>用户ID</th>
-                                    <th>用户名</th>
-                                    <th>角色</th>
-                                    <th>状态</th>
-                                    <th>操作</th>
-                                </tr>
-                            </thead>
-                            <tbody id="userTableBody">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </main>
+            </main>
+        </div>
     </div>
-</div>
 
-<!-- 新增访客模态框 -->
-<div class="modal fade" id="addVisitorModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">新增访客</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form id="visitorForm">
-                    <div class="mb-3">
-                        <label class="form-label">姓名</label>
-                        <input type="text" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">联系方式</label>
-                        <input type="tel" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">来访时间</label>
-                        <input type="datetime-local" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">来访事由</label>
-                        <textarea class="form-control" rows="3" required></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary">保存</button>
+    <!-- 新增访客模态框 -->
+    <div class="modal fade" id="addVisitorModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">新增访客</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">姓名</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">手机号</label>
+                            <input type="tel" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">来访目的</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">来访时间</label>
+                            <input type="datetime-local" class="form-control">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">保存</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // 菜单切换
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
-            
-            const targetPage = this.getAttribute('data-page');
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.getElementById(targetPage).classList.add('active');
-        });
-    });
-
-    // Mock数据
-    const visitors = [
-        {id: 1, name: '张三', phone: '13800138000', time: '2024-01-20 09:00', status: '已通过'},
-        {id: 2, name: '李四', phone: '13900139000', time: '2024-01-20 10:30', status: '待审核'},
-        {id: 3, name: '王五', phone: '13700137000', time: '2024-01-20 14:00', status: '已拒绝'}
-    ];
-
-    const appointments = [
-        {id: 1, name: '赵六', time: '2024-01-21 09:00', reason: '业务洽谈', status: '待审核'},
-        {id: 2, name: '钱七', time: '2024-01-21 11:00', reason: '面试', status: '待审核'}
-    ];
-
-    const users = [
-        {id: 1, username: 'admin', role: '管理员', status: '启用'},
-        {id: 2, username: 'operator', role: '操作员', status: '启用'}
-    ];
-
-    // 渲染访客表格
-    const visitorTableBody = document.getElementById('visitorTableBody');
-    visitors.forEach(visitor => {
-        visitorTableBody.innerHTML += `
-            <tr>
-                <td>${visitor.id}</td>
-                <td>${visitor.name}</td>
-                <td>${visitor.phone}</td>
-                <td>${visitor.time}</td>
-                <td><span class="badge bg-${visitor.status === '已通过' ? 'success' : visitor.status === '待审核' ? 'warning' : 'danger'}">${visitor.status}</span></td>
-                <td>
-                    <button class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                </td>
-            </tr>
-        `;
-    });
-
-    // 渲染预约表格
-    const appointmentTableBody = document.getElementById('appointmentTableBody');
-    appointments.forEach(appointment => {
-        appointmentTableBody.innerHTML += `
-            <tr>
-                <td>${appointment.id}</td>
-                <td>${appointment.name}</td>
-                <td>${appointment.time}</td>
-                <td>${appointment.reason}</td>
-                <td><span class="badge bg-warning">${appointment.status}</span></td>
-                <td>
-                    <button class="btn btn-sm btn-success">通过</button>
-                    <button class="btn btn-sm btn-danger">拒绝</button>
-                </td>
-            </tr>
-        `;
-    });
-
-    // 渲染用户表格
-    const userTableBody = document.getElementById('userTableBody');
-    users.forEach(user => {
-        userTableBody.innerHTML += `
-            <tr>
-                <td>${user.id}</td>
-                <td>${user.username}</td>
-                <td>${user.role}</td>
-                <td><span class="badge bg-success">${user.status}</span></td>
-                <td>
-                    <button class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                </td>
-            </tr>
-        `;
-    });
-
-    // 统计图表
-    const ctx = document.getElementById('visitorsChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-            datasets: [{
-                label: '访客数量',
-                data: [20, 25, 18, 30, 22, 15, 25],
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                title: {
-                    display: true,
-                    text: '本周访客统计'
-                }
-            }
-        }
-    });
-});
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
