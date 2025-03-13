@@ -3,113 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>访客预约登记</title>
+    <title>XPENG访客系统</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
+            background-color: #f5f5f5;
         }
         .container {
-            max-width: 600px;
+            max-width: 1200px;
             margin: 0 auto;
-            background-color: #fff;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        h1 {
+        header {
+            background-color: #1a1a1a;
+            color: white;
+            padding: 1rem;
             text-align: center;
-            color: #333;
         }
-        form {
-            display: flex;
-            flex-direction: column;
+        .visitor-form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
         }
         label {
-            margin-top: 10px;
+            display: block;
+            margin-bottom: 0.5rem;
             font-weight: bold;
         }
         input, select {
-            margin-bottom: 15px;
-            padding: 8px;
+            width: 100%;
+            padding: 0.5rem;
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-        button {
-            background-color: #4CAF50;
+        .submit-btn {
+            background-color: #007bff;
             color: white;
-            padding: 10px;
+            padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
+            width: 100%;
         }
-        button:hover {
-            background-color: #45a049;
-        }
-        #qrcode {
-            text-align: center;
-            margin-top: 20px;
+        .submit-btn:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
+    <header>
+        <h1>XPENG访客系统</h1>
+    </header>
+    
     <div class="container">
-        <h1>访客预约登记</h1>
-        <form id="registrationForm">
-            <label for="name">姓名：</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="phone">手机号：</label>
-            <input type="tel" id="phone" name="phone" required>
-
-            <label for="email">邮箱：</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="visitDate">预约日期：</label>
-            <input type="date" id="visitDate" name="visitDate" required>
-
-            <label for="visitTime">预约时间：</label>
-            <input type="time" id="visitTime" name="visitTime" required>
-
-            <label for="purpose">来访目的：</label>
-            <select id="purpose" name="purpose" required>
-                <option value="">请选择</option>
-                <option value="meeting">会议</option>
-                <option value="interview">面试</option>
-                <option value="consultation">咨询</option>
-                <option value="other">其他</option>
-            </select>
-
-            <button type="submit">提交预约</button>
-        </form>
-        <div id="qrcode"></div>
+        <main class="visitor-form">
+            <form>
+                <div class="form-group">
+                    <label for="visitorName">访客姓名</label>
+                    <input type="text" id="visitorName" name="visitorName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="idNumber">身份证号</label>
+                    <input type="text" id="idNumber" name="idNumber" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">联系电话</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="visitPurpose">访问目的</label>
+                    <select id="visitPurpose" name="visitPurpose" required>
+                        <option value="">请选择访问目的</option>
+                        <option value="business">商务洽谈</option>
+                        <option value="interview">面试</option>
+                        <option value="inspection">参观考察</option>
+                        <option value="other">其他</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="visitDate">访问日期</label>
+                    <input type="date" id="visitDate" name="visitDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="visitTime">访问时间</label>
+                    <input type="time" id="visitTime" name="visitTime" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="hostName">接待人姓名</label>
+                    <input type="text" id="hostName" name="hostName" required>
+                </div>
+                
+                <button type="submit" class="submit-btn">提交访客信息</button>
+            </form>
+        </main>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
-    <script>
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // 在实际应用中，这里应该发送数据到服务器并等待响应
-            // 这里仅作为演示，直接生成二维码
-            
-            var formData = new FormData(this);
-            var qrText = '';
-            for (var pair of formData.entries()) {
-                qrText += pair[0] + ': ' + pair[1] + '\n';
-            }
-
-            var qr = qrcode(0, 'M');
-            qr.addData(qrText);
-            qr.make();
-
-            document.getElementById('qrcode').innerHTML = qr.createImgTag(5);
-            alert('预约登记成功！请保存二维码以便入场。');
-        });
-    </script>
 </body>
 </html>
