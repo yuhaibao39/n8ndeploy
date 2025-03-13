@@ -5,244 +5,354 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>访客管理系统</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         .sidebar {
             min-height: 100vh;
-            background-color: #f8f9fa;
+            background: #343a40;
         }
-        .content {
-            padding: 20px;
+        .nav-link {
+            color: #fff;
+        }
+        .nav-link:hover {
+            color: #f8f9fa;
+        }
+        .active {
+            background: #495057;
         }
     </style>
 </head>
 <body>
-
-<div class="container-fluid">
-    <div class="row">
-        <!-- 左侧菜单 -->
-        <nav class="col-md-2 sidebar">
-            <div class="position-sticky pt-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#visitor" data-bs-toggle="tab">
-                            <i class="bi bi-people"></i> 访客管理
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#approval" data-bs-toggle="tab">
-                            <i class="bi bi-check-square"></i> 预约审核
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#statistics" data-bs-toggle="tab">
-                            <i class="bi bi-graph-up"></i> 数据统计
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#permission" data-bs-toggle="tab">
-                            <i class="bi bi-shield-lock"></i> 权限管理
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
-        <!-- 右侧内容 -->
-        <main class="col-md-10 content">
-            <div class="tab-content">
-                <!-- 访客管理 -->
-                <div class="tab-pane fade show active" id="visitor">
-                    <h2>访客管理</h2>
-                    <div class="mb-3">
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVisitorModal">新增访客</button>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 左侧菜单 -->
+            <nav class="col-md-2 sidebar p-0">
+                <div class="position-sticky">
+                    <div class="py-3 text-center">
+                        <h5 class="text-white">访客管理系统</h5>
                     </div>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>姓名</th>
-                                <th>手机号</th>
-                                <th>来访时间</th>
-                                <th>状态</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="visitorList">
-                        </tbody>
-                    </table>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#visitor-list" data-bs-toggle="tab">
+                                <i class="bi bi-people-fill me-2"></i>访客信息管理
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#appointment" data-bs-toggle="tab">
+                                <i class="bi bi-calendar-check me-2"></i>预约审核
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#statistics" data-bs-toggle="tab">
+                                <i class="bi bi-graph-up me-2"></i>数据统计
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#permission" data-bs-toggle="tab">
+                                <i class="bi bi-shield-lock me-2"></i>权限管理
+                            </a>
+                        </li>
+                    </ul>
                 </div>
+            </nav>
 
-                <!-- 预约审核 -->
-                <div class="tab-pane fade" id="approval">
-                    <h2>预约审核</h2>
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>申请编号</th>
-                                <th>访客姓名</th>
-                                <th>预约时间</th>
-                                <th>来访事由</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="approvalList">
-                        </tbody>
-                    </table>
-                </div>
+            <!-- 右侧内容 -->
+            <main class="col-md-10 ms-sm-auto px-4">
+                <div class="tab-content">
+                    <!-- 访客信息管理 -->
+                    <div class="tab-pane fade show active" id="visitor-list">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h2>访客信息管理</h2>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVisitorModal">
+                                <i class="bi bi-plus"></i> 新增访客
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>姓名</th>
+                                        <th>手机号</th>
+                                        <th>来访时间</th>
+                                        <th>来访事由</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="visitorTableBody">
+                                    <!-- 动态生成的访客数据 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
-                <!-- 数据统计 -->
-                <div class="tab-pane fade" id="statistics">
-                    <h2>数据统计</h2>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">访客统计</h5>
-                                    <canvas id="visitorChart"></canvas>
+                    <!-- 预约审核 -->
+                    <div class="tab-pane fade" id="appointment">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h2>预约审核</h2>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>申请ID</th>
+                                        <th>访客姓名</th>
+                                        <th>预约时间</th>
+                                        <th>来访目的</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="appointmentTableBody">
+                                    <!-- 动态生成的预约数据 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 数据统计 -->
+                    <div class="tab-pane fade" id="statistics">
+                        <div class="pt-3 pb-2 mb-3 border-bottom">
+                            <h2>数据统计</h2>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-4">
+                                <div class="card text-white bg-primary">
+                                    <div class="card-body">
+                                        <h5 class="card-title">今日访客</h5>
+                                        <p class="card-text display-6">25</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <div class="card text-white bg-success">
+                                    <div class="card-body">
+                                        <h5 class="card-title">本周访客</h5>
+                                        <p class="card-text display-6">156</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <div class="card text-white bg-warning">
+                                    <div class="card-body">
+                                        <h5 class="card-title">待审核</h5>
+                                        <p class="card-text display-6">8</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <div class="card text-white bg-danger">
+                                    <div class="card-body">
+                                        <h5 class="card-title">已拒绝</h5>
+                                        <p class="card-text display-6">3</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">审核统计</h5>
-                                    <canvas id="approvalChart"></canvas>
-                                </div>
-                            </div>
+                        <canvas id="visitorChart" width="400" height="200"></canvas>
+                    </div>
+
+                    <!-- 权限管理 -->
+                    <div class="tab-pane fade" id="permission">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h2>权限管理</h2>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                                <i class="bi bi-person-plus"></i> 新增用户
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>用户ID</th>
+                                        <th>用户名</th>
+                                        <th>角色</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userTableBody">
+                                    <!-- 动态生成的用户数据 -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-
-                <!-- 权限管理 -->
-                <div class="tab-pane fade" id="permission">
-                    <h2>权限管理</h2>
-                    <div class="mb-3">
-                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addRoleModal">新增角色</button>
-                    </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>角色名称</th>
-                                <th>权限描述</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="roleList">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </main>
+            </main>
+        </div>
     </div>
-</div>
 
-<!-- 新增访客模态框 -->
-<div class="modal fade" id="addVisitorModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">新增访客</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form id="visitorForm">
-                    <div class="mb-3">
-                        <label class="form-label">姓名</label>
-                        <input type="text" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">手机号</label>
-                        <input type="tel" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">来访时间</label>
-                        <input type="datetime-local" class="form-control" required>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary">保存</button>
+    <!-- 新增访客模态框 -->
+    <div class="modal fade" id="addVisitorModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">新增访客</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="visitorForm">
+                        <div class="mb-3">
+                            <label class="form-label">姓名</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">手机号</label>
+                            <input type="tel" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">来访时间</label>
+                            <input type="datetime-local" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">来访事由</label>
+                            <textarea class="form-control" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">保存</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    // Mock数据
-    const mockVisitors = [
-        {id: 1, name: '张三', phone: '13800138000', visitTime: '2024-01-20 14:00', status: '已到访'},
-        {id: 2, name: '李四', phone: '13900139000', visitTime: '2024-01-21 10:00', status: '待审核'}
-    ];
+    <!-- 新增用户模态框 -->
+    <div class="modal fade" id="addUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">新增用户</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="userForm">
+                        <div class="mb-3">
+                            <label class="form-label">用户名</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">密码</label>
+                            <input type="password" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">角色</label>
+                            <select class="form-select">
+                                <option value="admin">管理员</option>
+                                <option value="operator">操作员</option>
+                                <option value="viewer">访客</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    const mockApprovals = [
-        {id: 'A001', name: '王五', time: '2024-01-22 09:00', reason: '商务洽谈'},
-        {id: 'A002', name: '赵六', time: '2024-01-23 15:00', reason: '设备维护'}
-    ];
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Mock数据生成
+        const mockVisitors = [
+            {id: 1, name: "张三", phone: "13800138000", time: "2024-01-20 09:00", reason: "业务洽谈", status: "已通过"},
+            {id: 2, name: "李四", phone: "13900139000", time: "2024-01-20 10:30", reason: "面试", status: "待审核"},
+            {id: 3, name: "王五", phone: "13700137000", time: "2024-01-20 14:00", reason: "送货", status: "已拒绝"}
+        ];
 
-    // 初始化表格数据
-    document.addEventListener('DOMContentLoaded', function() {
-        // 访客列表
-        const visitorList = document.getElementById('visitorList');
-        mockVisitors.forEach(visitor => {
-            visitorList.innerHTML += `
+        const mockAppointments = [
+            {id: 1, name: "赵六", time: "2024-01-21 09:00", purpose: "商务会谈", status: "待审核"},
+            {id: 2, name: "钱七", time: "2024-01-21 11:00", purpose: "设备维护", status: "待审核"}
+        ];
+
+        const mockUsers = [
+            {id: 1, username: "admin", role: "管理员", status: "启用"},
+            {id: 2, username: "operator1", role: "操作员", status: "启用"},
+            {id: 3, username: "viewer1", role: "访客", status: "禁用"}
+        ];
+
+        // 渲染表格数据
+        function renderVisitorTable() {
+            const tbody = document.getElementById('visitorTableBody');
+            tbody.innerHTML = mockVisitors.map(visitor => `
                 <tr>
                     <td>${visitor.id}</td>
                     <td>${visitor.name}</td>
                     <td>${visitor.phone}</td>
-                    <td>${visitor.visitTime}</td>
-                    <td>${visitor.status}</td>
+                    <td>${visitor.time}</td>
+                    <td>${visitor.reason}</td>
+                    <td><span class="badge bg-${visitor.status === '已通过' ? 'success' : visitor.status === '待审核' ? 'warning' : 'danger'}">${visitor.status}</span></td>
                     <td>
-                        <button class="btn btn-sm btn-info">编辑</button>
+                        <button class="btn btn-sm btn-primary">编辑</button>
                         <button class="btn btn-sm btn-danger">删除</button>
                     </td>
                 </tr>
-            `;
-        });
+            `).join('');
+        }
 
-        // 审核列表
-        const approvalList = document.getElementById('approvalList');
-        mockApprovals.forEach(approval => {
-            approvalList.innerHTML += `
+        function renderAppointmentTable() {
+            const tbody = document.getElementById('appointmentTableBody');
+            tbody.innerHTML = mockAppointments.map(apt => `
                 <tr>
-                    <td>${approval.id}</td>
-                    <td>${approval.name}</td>
-                    <td>${approval.time}</td>
-                    <td>${approval.reason}</td>
+                    <td>${apt.id}</td>
+                    <td>${apt.name}</td>
+                    <td>${apt.time}</td>
+                    <td>${apt.purpose}</td>
+                    <td><span class="badge bg-warning">${apt.status}</span></td>
                     <td>
                         <button class="btn btn-sm btn-success">通过</button>
                         <button class="btn btn-sm btn-danger">拒绝</button>
                     </td>
                 </tr>
-            `;
-        });
+            `).join('');
+        }
+
+        function renderUserTable() {
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = mockUsers.map(user => `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.username}</td>
+                    <td>${user.role}</td>
+                    <td><span class="badge bg-${user.status === '启用' ? 'success' : 'danger'}">${user.status}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-primary">编辑</button>
+                        <button class="btn btn-sm btn-danger">删除</button>
+                        <button class="btn btn-sm btn-${user.status === '启用' ? 'warning' : 'success'}">${user.status === '启用' ? '禁用' : '启用'}</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
 
         // 初始化图表
-        const visitorChart = new Chart(document.getElementById('visitorChart'), {
-            type: 'bar',
-            data: {
-                labels: ['周一', '周二', '周三', '周四', '周五'],
-                datasets: [{
-                    label: '访客数量',
-                    data: [12, 19, 3, 5, 2],
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)'
-                }]
-            }
-        });
+        function initChart() {
+            const ctx = document.getElementById('visitorChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    datasets: [{
+                        label: '访客数量',
+                        data: [12, 19, 3, 5, 2, 3, 7],
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                }
+            });
+        }
 
-        const approvalChart = new Chart(document.getElementById('approvalChart'), {
-            type: 'pie',
-            data: {
-                labels: ['已通过', '待审核', '已拒绝'],
-                datasets: [{
-                    data: [30, 15, 5],
-                    backgroundColor: ['#28a745', '#ffc107', '#dc3545']
-                }]
-            }
+        // 页面加载完成后初始化数据
+        document.addEventListener('DOMContentLoaded', () => {
+            renderVisitorTable();
+            renderAppointmentTable();
+            renderUserTable();
+            initChart();
         });
-    });
-</script>
+    </script>
 </body>
 </html>
