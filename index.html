@@ -59,7 +59,7 @@
 <body>
     <div class="container">
         <h1>访客预约登记</h1>
-        <form id="appointmentForm">
+        <form id="visitorForm">
             <label for="name">姓名：</label>
             <input type="text" id="name" name="name" required>
 
@@ -69,18 +69,18 @@
             <label for="email">邮箱：</label>
             <input type="email" id="email" name="email" required>
 
-            <label for="date">预约日期：</label>
-            <input type="date" id="date" name="date" required>
+            <label for="visitDate">来访日期：</label>
+            <input type="date" id="visitDate" name="visitDate" required>
 
-            <label for="time">预约时间：</label>
-            <input type="time" id="time" name="time" required>
+            <label for="visitTime">来访时间：</label>
+            <input type="time" id="visitTime" name="visitTime" required>
 
             <label for="purpose">来访目的：</label>
             <select id="purpose" name="purpose" required>
                 <option value="">请选择</option>
                 <option value="meeting">会议</option>
                 <option value="interview">面试</option>
-                <option value="visit">参观</option>
+                <option value="delivery">送货</option>
                 <option value="other">其他</option>
             </select>
 
@@ -92,27 +92,23 @@
 
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
     <script>
-        document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+        document.getElementById('visitorForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // 获取表单数据
-            var formData = new FormData(this);
-            var appointmentInfo = '';
-            for (var pair of formData.entries()) {
-                appointmentInfo += pair[0] + ': ' + pair[1] + '\n';
+            // 收集表单数据
+            const formData = new FormData(this);
+            let visitorInfo = '';
+            for (let [key, value] of formData.entries()) {
+                visitorInfo += `${key}: ${value}\n`;
             }
 
             // 生成二维码
-            var qr = qrcode(0, 'M');
-            qr.addData(appointmentInfo);
+            const qr = qrcode(0, 'M');
+            qr.addData(visitorInfo);
             qr.make();
 
             // 显示二维码
             document.getElementById('qrcode').innerHTML = qr.createImgTag(5);
-            
-            // 这里可以添加将预约信息发送到服务器的代码
-
-            alert('预约成功！请保存二维码。');
         });
     </script>
 </body>
