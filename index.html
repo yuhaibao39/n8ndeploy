@@ -80,7 +80,7 @@
                 <option value="">请选择</option>
                 <option value="meeting">会议</option>
                 <option value="interview">面试</option>
-                <option value="business">商务洽谈</option>
+                <option value="consultation">咨询</option>
                 <option value="other">其他</option>
             </select>
 
@@ -96,22 +96,24 @@
             e.preventDefault();
             
             // 获取表单数据
-            var formData = new FormData(this);
-            var appointmentInfo = '';
-            for (var pair of formData.entries()) {
-                appointmentInfo += pair[0] + ': ' + pair[1] + '\n';
+            const formData = new FormData(this);
+            let appointmentInfo = '';
+            for (let [key, value] of formData.entries()) {
+                appointmentInfo += `${key}: ${value}\n`;
             }
 
             // 生成二维码
-            var qr = qrcode(0, 'M');
+            const qr = qrcode(0, 'M');
             qr.addData(appointmentInfo);
             qr.make();
 
             // 显示二维码
-            document.getElementById('qrcode').innerHTML = qr.createImgTag();
-            
+            document.getElementById('qrcode').innerHTML = qr.createImgTag(5);
+
             // 清空表单
             this.reset();
+
+            alert('预约成功！请保存二维码。');
         });
     </script>
 </body>
