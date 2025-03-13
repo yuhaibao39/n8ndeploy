@@ -12,34 +12,28 @@
         .hidden {
             display: none;
         }
-        .brand-text {
-            color: #0d6efd;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="#"><span class="brand-text">XPENG访客管理系统</span></a>
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">XPENG访客管理系统</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#" data-page="home">首页</a>
+                        <a class="nav-link active" href="#home" data-page="home">首页</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-page="appointment">访客预约</a>
+                        <a class="nav-link" href="#appointment" data-page="appointment">访客预约</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-page="management">预约管理</a>
+                        <a class="nav-link" href="#management" data-page="management">预约管理</a>
                     </li>
-                </ul>
-                <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-page="login">登录</a>
+                        <a class="nav-link" href="#login" data-page="login">系统登录</a>
                     </li>
                 </ul>
             </div>
@@ -48,7 +42,7 @@
 
     <div class="container mt-4">
         <!-- 首页 -->
-        <div id="home" class="page">
+        <div id="home" class="page-content">
             <h2 class="mb-4">访客预约登记</h2>
             <form id="visitorForm" class="needs-validation" novalidate>
                 <div class="row mb-3">
@@ -57,75 +51,70 @@
                         <input type="text" class="form-control" required>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">手机号码</label>
-                        <input type="tel" class="form-control" required>
+                        <label class="form-label">身份证号</label>
+                        <input type="text" class="form-control" required>
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label class="form-label">来访时间</label>
-                        <input type="datetime-local" class="form-control" required>
+                        <label class="form-label">联系电话</label>
+                        <input type="tel" class="form-control" required>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">访问事由</label>
+                        <label class="form-label">访问日期</label>
+                        <input type="date" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">来访事由</label>
                         <select class="form-select" required>
                             <option value="">请选择</option>
-                            <option>商务会谈</option>
+                            <option>商务洽谈</option>
                             <option>面试</option>
                             <option>参观</option>
                             <option>其他</option>
                         </select>
                     </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">备注说明</label>
-                    <textarea class="form-control" rows="3"></textarea>
+                    <div class="col-md-6">
+                        <label class="form-label">被访人</label>
+                        <input type="text" class="form-control" required>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">提交预约</button>
             </form>
         </div>
 
         <!-- 访客预约 -->
-        <div id="appointment" class="page hidden">
+        <div id="appointment" class="page-content hidden">
             <h2>访客预约</h2>
             <div class="alert alert-info mt-3">
-                请填写访客信息进行预约登记。
+                请填写访客信息进行预约登记
             </div>
-            <!-- 预约表单与首页相同 -->
+            <!-- 预约表单将通过JavaScript动态加载 -->
         </div>
 
         <!-- 预约管理 -->
-        <div id="management" class="page hidden">
+        <div id="management" class="page-content hidden">
             <h2>预约管理</h2>
             <table class="table table-striped mt-3">
                 <thead>
                     <tr>
                         <th>访客姓名</th>
-                        <th>手机号码</th>
-                        <th>来访时间</th>
-                        <th>访问事由</th>
+                        <th>访问日期</th>
+                        <th>来访事由</th>
                         <th>状态</th>
                         <th>操作</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>张三</td>
-                        <td>13800138000</td>
-                        <td>2024-01-20 14:30</td>
-                        <td>商务会谈</td>
-                        <td><span class="badge bg-success">已确认</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-primary">编辑</button>
-                            <button class="btn btn-sm btn-danger">取消</button>
-                        </td>
-                    </tr>
+                <tbody id="appointmentList">
+                    <!-- 数据将通过JavaScript动态加载 -->
                 </tbody>
             </table>
         </div>
 
         <!-- 登录页面 -->
-        <div id="login" class="page hidden">
+        <div id="login" class="page-content hidden">
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="card">
@@ -133,7 +122,7 @@
                             系统登录
                         </div>
                         <div class="card-body">
-                            <form>
+                            <form id="loginForm">
                                 <div class="mb-3">
                                     <label class="form-label">用户名</label>
                                     <input type="text" class="form-control" required>
@@ -153,42 +142,58 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 页面切换逻辑
-            const navLinks = document.querySelectorAll('.nav-link');
-            const pages = document.querySelectorAll('.page');
+        // Mock数据
+        const mockAppointments = [
+            { name: "张三", date: "2024-01-20", reason: "商务洽谈", status: "待审核" },
+            { name: "李四", date: "2024-01-21", reason: "面试", status: "已通过" }
+        ];
 
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetPage = this.getAttribute('data-page');
-                    
-                    // 更新导航激活状态
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-
-                    // 显示目标页面
-                    pages.forEach(page => {
-                        page.classList.add('hidden');
-                        if (page.id === targetPage) {
-                            page.classList.remove('hidden');
-                        }
-                    });
+        // 页面切换逻辑
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
+                document.querySelectorAll('.page-content').forEach(page => {
+                    page.classList.add('hidden');
                 });
-            });
-
-            // 表单验证
-            const forms = document.querySelectorAll('.needs-validation');
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', function(event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
+                document.getElementById(pageId).classList.remove('hidden');
+                document.querySelectorAll('.nav-link').forEach(nav => {
+                    nav.classList.remove('active');
                 });
+                link.classList.add('active');
             });
         });
+
+        // 加载预约列表
+        function loadAppointments() {
+            const tbody = document.getElementById('appointmentList');
+            tbody.innerHTML = mockAppointments.map(app => `
+                <tr>
+                    <td>${app.name}</td>
+                    <td>${app.date}</td>
+                    <td>${app.reason}</td>
+                    <td>${app.status}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary">审核</button>
+                        <button class="btn btn-sm btn-danger">删除</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // 表单提交处理
+        document.getElementById('visitorForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('预约提交成功！');
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('登录成功！');
+        });
+
+        // 初始加载
+        loadAppointments();
     </script>
 </body>
 </html>
