@@ -24,16 +24,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#home" onclick="showPage('home')">首页</a>
+                        <a class="nav-link active" href="#home" data-page="home">首页</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#appointment" onclick="showPage('appointment')">访客预约</a>
+                        <a class="nav-link" href="#appointment" data-page="appointment">访客预约</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#management" onclick="showPage('management')">预约管理</a>
+                        <a class="nav-link" href="#management" data-page="management">预约管理</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#login" onclick="showPage('login')">系统登录</a>
+                        <a class="nav-link" href="#login" data-page="login">系统登录</a>
                     </li>
                 </ul>
             </div>
@@ -41,101 +41,117 @@
     </nav>
 
     <div class="container mt-4">
-        <!-- 首页 -->
-        <div id="home" class="page">
-            <h2 class="mb-4">访客预约登记</h2>
-            <form id="visitorForm" class="needs-validation" novalidate>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label">访客姓名</label>
-                        <input type="text" class="form-control" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">联系电话</label>
-                        <input type="tel" class="form-control" required>
-                    </div>
+        <!-- 首页内容 -->
+        <div id="home" class="page-content">
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <h2 class="text-center mb-4">访客预约登记</h2>
+                    <form id="visitorForm">
+                        <div class="mb-3">
+                            <label class="form-label">访客姓名</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">身份证号</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">联系电话</label>
+                            <input type="tel" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">来访目的</label>
+                            <textarea class="form-control" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">预约时间</label>
+                            <input type="datetime-local" class="form-control" required>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">提交预约</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label">来访时间</label>
-                        <input type="datetime-local" class="form-control" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">来访事由</label>
-                        <select class="form-select" required>
-                            <option value="">请选择</option>
-                            <option value="1">业务洽谈</option>
-                            <option value="2">面试</option>
-                            <option value="3">参观</option>
-                            <option value="4">其他</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">备注说明</label>
-                    <textarea class="form-control" rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">提交预约</button>
-            </form>
-        </div>
-
-        <!-- 访客预约 -->
-        <div id="appointment" class="page hidden">
-            <h2>访客预约</h2>
-            <div class="alert alert-info mt-3">
-                请填写访客信息进行预约登记
             </div>
-            <!-- 预约表单与首页相同 -->
         </div>
 
-        <!-- 预约管理 -->
-        <div id="management" class="page hidden">
-            <h2>预约管理</h2>
-            <table class="table table-striped mt-3">
+        <!-- 访客预约页面 -->
+        <div id="appointment" class="page-content hidden">
+            <h2>访客预约记录</h2>
+            <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th>预约编号</th>
                         <th>访客姓名</th>
-                        <th>联系电话</th>
-                        <th>来访时间</th>
-                        <th>来访事由</th>
+                        <th>预约时间</th>
                         <th>状态</th>
                         <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
+                        <td>A001</td>
                         <td>张三</td>
-                        <td>13800138000</td>
-                        <td>2024-01-20 09:00</td>
-                        <td>业务洽谈</td>
-                        <td><span class="badge bg-success">已确认</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-primary">编辑</button>
-                            <button class="btn btn-sm btn-danger">取消</button>
-                        </td>
+                        <td>2024-01-20 14:30</td>
+                        <td><span class="badge bg-success">已通过</span></td>
+                        <td><button class="btn btn-sm btn-info">查看详情</button></td>
                     </tr>
                     <tr>
+                        <td>A002</td>
                         <td>李四</td>
-                        <td>13900139000</td>
-                        <td>2024-01-21 14:00</td>
-                        <td>面试</td>
-                        <td><span class="badge bg-warning">待确认</span></td>
+                        <td>2024-01-21 10:00</td>
+                        <td><span class="badge bg-warning">待审核</span></td>
+                        <td><button class="btn btn-sm btn-info">查看详情</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 预约管理页面 -->
+        <div id="management" class="page-content hidden">
+            <h2>预约管理</h2>
+            <div class="mb-3">
+                <button class="btn btn-primary">批量审核</button>
+                <button class="btn btn-secondary">导出数据</button>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox"></th>
+                        <th>预约编号</th>
+                        <th>访客姓名</th>
+                        <th>联系方式</th>
+                        <th>来访目的</th>
+                        <th>预约时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>A003</td>
+                        <td>王五</td>
+                        <td>13800138000</td>
+                        <td>业务洽谈</td>
+                        <td>2024-01-22 09:30</td>
+                        <td><span class="badge bg-warning">待审核</span></td>
                         <td>
-                            <button class="btn btn-sm btn-primary">编辑</button>
-                            <button class="btn btn-sm btn-danger">取消</button>
+                            <button class="btn btn-sm btn-success">通过</button>
+                            <button class="btn btn-sm btn-danger">拒绝</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- 系统登录 -->
-        <div id="login" class="page hidden">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
+        <!-- 登录页面 -->
+        <div id="login" class="page-content hidden">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
                     <div class="card">
                         <div class="card-body">
-                            <h3 class="card-title text-center mb-4">系统登录</h3>
+                            <h3 class="text-center mb-4">系统登录</h3>
                             <form>
                                 <div class="mb-3">
                                     <label class="form-label">用户名</label>
@@ -145,7 +161,9 @@
                                     <label class="form-label">密码</label>
                                     <input type="password" class="form-control" required>
                                 </div>
-                                <button type="submit" class="btn btn-primary w-100">登录</button>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary w-100">登录</button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -156,21 +174,24 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.add('hidden');
-            });
-            document.getElementById(pageId).classList.remove('hidden');
-            
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            document.querySelector(`[href="#${pageId}"]`).classList.add('active');
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page-content');
 
-        document.getElementById('visitorForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            alert('预约提交成功！');
+            function showPage(pageId) {
+                pages.forEach(page => page.classList.add('hidden'));
+                document.getElementById(pageId).classList.remove('hidden');
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('data-page');
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    showPage(pageId);
+                });
+            });
         });
     </script>
 </body>
