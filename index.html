@@ -5,146 +5,132 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XPENG访客系统</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         .nav-bg {
             background-color: #007bff;
         }
-        .form-container {
-            max-width: 800px;
-            margin: 20px auto;
+        .main-content {
+            min-height: calc(100vh - 56px);
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #loginForm, #registerForm {
+            display: none;
         }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark nav-bg">
         <div class="container">
-            <a class="navbar-brand" href="#"><strong>XPENG访客系统</strong></a>
+            <a class="navbar-brand" href="#">XPENG访客系统</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#" onclick="showPage('appointment')">访客预约</a>
+                        <a class="nav-link" href="#" onclick="showForm('appointmentForm')">访客预约</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="showPage('register')">注册</a>
+                        <a class="nav-link" href="#" onclick="showForm('loginForm')">登录</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="showPage('login')">登录</a>
+                        <a class="nav-link" href="#" onclick="showForm('registerForm')">注册</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container" id="mainContent">
-        <!-- 访客预约页面 -->
-        <div id="appointmentPage" class="form-container">
-            <h2 class="text-center mb-4">访客预约登记</h2>
-            <form id="appointmentForm">
+    <main class="main-content">
+        <div class="container">
+            <form id="appointmentForm" class="needs-validation" novalidate>
+                <h2 class="mb-4">访客预约登记</h2>
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label class="form-label">访客姓名</label>
-                        <input type="text" class="form-control" required>
+                        <label for="visitorName" class="form-label">访客姓名</label>
+                        <input type="text" class="form-control" id="visitorName" required>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">身份证号</label>
-                        <input type="text" class="form-control" required>
+                        <label for="phone" class="form-label">联系电话</label>
+                        <input type="tel" class="form-control" id="phone" required>
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label class="form-label">联系电话</label>
-                        <input type="tel" class="form-control" required>
+                        <label for="visitDate" class="form-label">访问日期</label>
+                        <input type="date" class="form-control" id="visitDate" required>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">来访时间</label>
-                        <input type="datetime-local" class="form-control" required>
+                        <label for="visitTime" class="form-label">访问时间</label>
+                        <input type="time" class="form-control" id="visitTime" required>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">来访事由</label>
-                    <textarea class="form-control" rows="3" required></textarea>
+                    <label for="purpose" class="form-label">来访目的</label>
+                    <textarea class="form-control" id="purpose" rows="3" required></textarea>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">被访人</label>
-                    <input type="text" class="form-control" required>
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary">提交预约</button>
-                </div>
+                <button type="submit" class="btn btn-primary">提交预约</button>
             </form>
-        </div>
 
-        <!-- 注册页面 -->
-        <div id="registerPage" class="form-container" style="display: none;">
-            <h2 class="text-center mb-4">用户注册</h2>
-            <form id="registerForm">
+            <form id="loginForm" class="needs-validation" novalidate>
+                <h2 class="mb-4">用户登录</h2>
                 <div class="mb-3">
-                    <label class="form-label">用户名</label>
-                    <input type="text" class="form-control" required>
+                    <label for="loginEmail" class="form-label">邮箱地址</label>
+                    <input type="email" class="form-control" id="loginEmail" required>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">密码</label>
-                    <input type="password" class="form-control" required>
+                    <label for="loginPassword" class="form-label">密码</label>
+                    <input type="password" class="form-control" id="loginPassword" required>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">确认密码</label>
-                    <input type="password" class="form-control" required>
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary">注册</button>
-                </div>
+                <button type="submit" class="btn btn-primary">登录</button>
             </form>
-        </div>
 
-        <!-- 登录页面 -->
-        <div id="loginPage" class="form-container" style="display: none;">
-            <h2 class="text-center mb-4">用户登录</h2>
-            <form id="loginForm">
+            <form id="registerForm" class="needs-validation" novalidate>
+                <h2 class="mb-4">用户注册</h2>
                 <div class="mb-3">
-                    <label class="form-label">用户名</label>
-                    <input type="text" class="form-control" required>
+                    <label for="registerName" class="form-label">用户名</label>
+                    <input type="text" class="form-control" id="registerName" required>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">密码</label>
-                    <input type="password" class="form-control" required>
+                    <label for="registerEmail" class="form-label">邮箱地址</label>
+                    <input type="email" class="form-control" id="registerEmail" required>
                 </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary">登录</button>
+                <div class="mb-3">
+                    <label for="registerPassword" class="form-label">密码</label>
+                    <input type="password" class="form-control" id="registerPassword" required>
                 </div>
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">确认密码</label>
+                    <input type="password" class="form-control" id="confirmPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">注册</button>
             </form>
         </div>
-    </div>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function showPage(pageId) {
-            document.getElementById('appointmentPage').style.display = 'none';
-            document.getElementById('registerPage').style.display = 'none';
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById(pageId + 'Page').style.display = 'block';
+        function showForm(formId) {
+            document.getElementById('appointmentForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById(formId).style.display = 'block';
         }
 
-        // Mock数据处理
-        document.getElementById('appointmentForm').onsubmit = function(e) {
-            e.preventDefault();
-            alert('预约提交成功！');
-        };
-
-        document.getElementById('registerForm').onsubmit = function(e) {
-            e.preventDefault();
-            alert('注册成功！');
-        };
-
-        document.getElementById('loginForm').onsubmit = function(e) {
-            e.preventDefault();
-            alert('登录成功！');
-        };
+        // 表单验证
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                event.preventDefault();
+                if (!form.checkValidity()) {
+                    event.stopPropagation();
+                } else {
+                    alert('提交成功！');
+                    form.reset();
+                }
+                form.classList.add('was-validated');
+            });
+        });
     </script>
 </body>
 </html>
