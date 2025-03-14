@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,241 +8,219 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         .sidebar {
-            height: 100vh;
-            background-color: #f8f9fa;
-            border-right: 1px solid #dee2e6;
-        }
-        .content {
-            padding: 20px;
+            min-height: 100vh;
+            background: #2c3e50;
         }
         .nav-link {
-            color: #0d6efd;
+            color: #ecf0f1;
+        }
+        .nav-link:hover {
+            background: #34495e;
+            color: #fff;
         }
         .nav-link.active {
-            background-color: #0d6efd;
-            color: white;
+            background: #3498db;
+        }
+        .content-wrapper {
+            padding: 20px;
+        }
+        .stats-card {
+            transition: transform 0.3s;
+        }
+        .stats-card:hover {
+            transform: translateY(-5px);
         }
     </style>
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
-            <!-- 侧边栏菜单 -->
-            <nav class="col-md-2 sidebar">
-                <div class="position-sticky pt-3">
-                    <div class="text-center mb-4">
-                        <h5>访客管理系统</h5>
-                    </div>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#dashboard">
-                                <i class="bi bi-house-door me-2"></i>控制面板
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#visitors">
-                                <i class="bi bi-people me-2"></i>访客管理
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#appointments">
-                                <i class="bi bi-calendar-check me-2"></i>预约审核
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#statistics">
-                                <i class="bi bi-graph-up me-2"></i>数据统计
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#permissions">
-                                <i class="bi bi-shield-lock me-2"></i>权限管理
-                            </a>
-                        </li>
-                    </ul>
+            <!-- 侧边栏 -->
+            <nav class="col-md-2 sidebar py-3">
+                <div class="text-center mb-4">
+                    <h4 class="text-white">访客管理系统</h4>
+                </div>
+                <div class="nav flex-column">
+                    <a class="nav-link active mb-2" href="#dashboard" data-bs-toggle="tab">
+                        <i class="bi bi-speedometer2 me-2"></i>控制台
+                    </a>
+                    <a class="nav-link mb-2" href="#visitors" data-bs-toggle="tab">
+                        <i class="bi bi-people me-2"></i>访客管理
+                    </a>
+                    <a class="nav-link mb-2" href="#appointments" data-bs-toggle="tab">
+                        <i class="bi bi-calendar-check me-2"></i>预约审核
+                    </a>
+                    <a class="nav-link mb-2" href="#statistics" data-bs-toggle="tab">
+                        <i class="bi bi-graph-up me-2"></i>数据统计
+                    </a>
+                    <a class="nav-link mb-2" href="#permissions" data-bs-toggle="tab">
+                        <i class="bi bi-shield-lock me-2"></i>权限管理
+                    </a>
                 </div>
             </nav>
 
-            <!-- 主要内容区域 -->
-            <main class="col-md-10 content">
-                <!-- 控制面板 -->
-                <div id="dashboard" class="content-section">
-                    <h2 class="mb-4">控制面板</h2>
-                    <div class="row">
-                        <div class="col-md-3 mb-4">
-                            <div class="card text-white bg-primary">
-                                <div class="card-body">
-                                    <h5 class="card-title">今日访客</h5>
-                                    <p class="card-text h2">125</p>
+            <!-- 主内容区 -->
+            <main class="col-md-10 ms-auto content-wrapper">
+                <div class="tab-content">
+                    <!-- 控制台 -->
+                    <div class="tab-pane fade show active" id="dashboard">
+                        <h2 class="mb-4">控制台</h2>
+                        <div class="row">
+                            <div class="col-md-3 mb-4">
+                                <div class="card bg-primary text-white stats-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">今日访客</h5>
+                                        <h2>156</h2>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3 mb-4">
-                            <div class="card text-white bg-success">
-                                <div class="card-body">
-                                    <h5 class="card-title">待审核预约</h5>
-                                    <p class="card-text h2">18</p>
+                            <div class="col-md-3 mb-4">
+                                <div class="card bg-success text-white stats-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">待审核预约</h5>
+                                        <h2>23</h2>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3 mb-4">
-                            <div class="card text-white bg-warning">
-                                <div class="card-body">
-                                    <h5 class="card-title">本月访客</h5>
-                                    <p class="card-text h2">2,840</p>
+                            <div class="col-md-3 mb-4">
+                                <div class="card bg-warning text-white stats-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">本月访客</h5>
+                                        <h2>2,891</h2>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3 mb-4">
-                            <div class="card text-white bg-info">
-                                <div class="card-body">
-                                    <h5 class="card-title">系统用户</h5>
-                                    <p class="card-text h2">45</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 访客管理 -->
-                <div id="visitors" class="content-section d-none">
-                    <h2 class="mb-4">访客管理</h2>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between mb-3">
-                                <div class="d-flex gap-2">
-                                    <input type="text" class="form-control" placeholder="搜索访客">
-                                    <button class="btn btn-primary">搜索</button>
-                                </div>
-                                <button class="btn btn-success">添加访客</button>
-                            </div>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>访客ID</th>
-                                        <th>姓名</th>
-                                        <th>联系方式</th>
-                                        <th>来访时间</th>
-                                        <th>来访事由</th>
-                                        <th>状态</th>
-                                        <th>操作</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>V001</td>
-                                        <td>张三</td>
-                                        <td>13800138000</td>
-                                        <td>2024-01-20 09:30</td>
-                                        <td>业务洽谈</td>
-                                        <td><span class="badge bg-success">已通过</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-primary">编辑</button>
-                                            <button class="btn btn-sm btn-danger">删除</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 预约审核 -->
-                <div id="appointments" class="content-section d-none">
-                    <h2 class="mb-4">预约审核</h2>
-                    <div class="card">
-                        <div class="card-body">
-                            <ul class="nav nav-tabs mb-3">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="#">待审核</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">已审核</a>
-                                </li>
-                            </ul>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>预约编号</th>
-                                        <th>访客姓名</th>
-                                        <th>预约时间</th>
-                                        <th>访问对象</th>
-                                        <th>状态</th>
-                                        <th>操作</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>A001</td>
-                                        <td>李四</td>
-                                        <td>2024-01-21 14:00</td>
-                                        <td>技术部</td>
-                                        <td><span class="badge bg-warning">待审核</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-success">通过</button>
-                                            <button class="btn btn-sm btn-danger">拒绝</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 数据统计 -->
-                <div id="statistics" class="content-section d-none">
-                    <h2 class="mb-4">数据统计</h2>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <h5 class="card-title">访客趋势</h5>
-                                    <canvas id="visitorChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <h5 class="card-title">来访目的分布</h5>
-                                    <canvas id="purposeChart"></canvas>
+                            <div class="col-md-3 mb-4">
+                                <div class="card bg-info text-white stats-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">活跃用户</h5>
+                                        <h2>45</h2>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- 权限管理 -->
-                <div id="permissions" class="content-section d-none">
-                    <h2 class="mb-4">权限管理</h2>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-end mb-3">
-                                <button class="btn btn-primary">添加角色</button>
+                    <!-- 访客管理 -->
+                    <div class="tab-pane fade" id="visitors">
+                        <h2 class="mb-4">访客管理</h2>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <div>
+                                        <button class="btn btn-primary me-2">添加访客</button>
+                                        <button class="btn btn-secondary">导出数据</button>
+                                    </div>
+                                    <div class="d-flex">
+                                        <input type="search" class="form-control me-2" placeholder="搜索访客...">
+                                        <button class="btn btn-outline-primary">搜索</button>
+                                    </div>
+                                </div>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>姓名</th>
+                                            <th>联系方式</th>
+                                            <th>来访时间</th>
+                                            <th>来访目的</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>张三</td>
+                                            <td>13800138000</td>
+                                            <td>2024-01-20 09:30</td>
+                                            <td>业务洽谈</td>
+                                            <td><span class="badge bg-success">已确认</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-info">编辑</button>
+                                                <button class="btn btn-sm btn-danger">删除</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>角色名称</th>
-                                        <th>描述</th>
-                                        <th>权限数量</th>
-                                        <th>创建时间</th>
-                                        <th>操作</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>管理员</td>
-                                        <td>系统最高权限</td>
-                                        <td>所有权限</td>
-                                        <td>2024-01-01</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-primary">编辑</button>
-                                            <button class="btn btn-sm btn-danger">删除</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 预约审核 -->
+                    <div class="tab-pane fade" id="appointments">
+                        <h2 class="mb-4">预约审核</h2>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="list-group">
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h5 class="mb-1">李四 - 产品演示</h5>
+                                                <p class="mb-1">预约时间：2024-01-21 14:00</p>
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-success me-2">通过</button>
+                                                <button class="btn btn-danger">拒绝</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 数据统计 -->
+                    <div class="tab-pane fade" id="statistics">
+                        <h2 class="mb-4">数据统计</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">访客趋势</h5>
+                                        <canvas id="visitorChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">来访目的分布</h5>
+                                        <canvas id="purposeChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 权限管理 -->
+                    <div class="tab-pane fade" id="permissions">
+                        <h2 class="mb-4">权限管理</h2>
+                        <div class="card">
+                            <div class="card-body">
+                                <button class="btn btn-primary mb-3">添加角色</button>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>角色名称</th>
+                                            <th>权限描述</th>
+                                            <th>用户数量</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>管理员</td>
+                                            <td>系统所有权限</td>
+                                            <td>3</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-info">编辑</button>
+                                                <button class="btn btn-sm btn-danger">删除</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -254,29 +232,13 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 菜单切换
-            const navLinks = document.querySelectorAll('.nav-link');
-            const contentSections = document.querySelectorAll('.content-section');
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const targetId = link.getAttribute('href').substring(1);
-                    
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-                    
-                    contentSections.forEach(section => {
-                        if (section.id === targetId) {
-                            section.classList.remove('d-none');
-                        } else {
-                            section.classList.add('d-none');
-                        }
-                    });
-                });
+            // 初始化所有的工具提示
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
             });
 
-            // 图表初始化
+            // 访客趋势图表
             const visitorCtx = document.getElementById('visitorChart').getContext('2d');
             new Chart(visitorCtx, {
                 type: 'line',
@@ -284,20 +246,22 @@
                     labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
                     datasets: [{
                         label: '访客数量',
-                        data: [1200, 1900, 1500, 2100, 1800, 2400],
-                        borderColor: '#0d6efd'
+                        data: [65, 59, 80, 81, 56, 55],
+                        borderColor: '#3498db',
+                        tension: 0.1
                     }]
                 }
             });
 
+            // 来访目的分布图表
             const purposeCtx = document.getElementById('purposeChart').getContext('2d');
             new Chart(purposeCtx, {
-                type: 'pie',
+                type: 'doughnut',
                 data: {
-                    labels: ['业务洽谈', '面试', '参观', '其他'],
+                    labels: ['业务洽谈', '产品演示', '技术支持', '其他'],
                     datasets: [{
-                        data: [40, 25, 20, 15],
-                        backgroundColor: ['#0d6efd', '#198754', '#ffc107', '#6c757d']
+                        data: [30, 25, 20, 25],
+                        backgroundColor: ['#3498db', '#2ecc71', '#e74c3c', '#f1c40f']
                     }]
                 }
             });
