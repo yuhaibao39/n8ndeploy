@@ -4,61 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>访客管理系统</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .card {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <div id="app" class="container mt-4">
-        <!-- 导航栏 -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">访客管理系统</a>
-                <div class="collapse navbar-collapse">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" @click="currentView='appointment'">预约管理</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" @click="currentView='checkin'">访客登记</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" @click="currentView='checkout'">访客离场</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">访客管理系统</a>
+    </nav>
 
-        <!-- 预约表单 -->
-        <div v-if="currentView === 'appointment'" class="card">
+    <div class="container mt-4">
+        <!-- 访客预约表单 -->
+        <div class="card">
             <div class="card-header">
-                <h5>访客预约</h5>
+                访客预约
             </div>
             <div class="card-body">
-                <form @submit.prevent="submitAppointment">
-                    <div class="mb-3">
-                        <label class="form-label">访客姓名</label>
-                        <input type="text" class="form-control" v-model="appointment.visitorName" required>
+                <form id="appointmentForm">
+                    <div class="form-group">
+                        <label>访客姓名</label>
+                        <input type="text" class="form-control" name="visitorName" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">手机号码</label>
-                        <input type="tel" class="form-control" v-model="appointment.visitorPhone" required>
+                    <div class="form-group">
+                        <label>手机号码</label>
+                        <input type="tel" class="form-control" name="visitorPhone" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">身份证号</label>
-                        <input type="text" class="form-control" v-model="appointment.visitorIdCard" required>
+                    <div class="form-group">
+                        <label>身份证号</label>
+                        <input type="text" class="form-control" name="visitorIdCard" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">被访人ID</label>
-                        <input type="number" class="form-control" v-model="appointment.employeeId" required>
+                    <div class="form-group">
+                        <label>被访人</label>
+                        <select class="form-control" name="employeeId" required>
+                            <option value="">请选择被访人</option>
+                        </select>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">来访目的</label>
-                        <textarea class="form-control" v-model="appointment.visitPurpose" required></textarea>
+                    <div class="form-group">
+                        <label>来访目的</label>
+                        <textarea class="form-control" name="visitPurpose" required></textarea>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">预约时间</label>
-                        <input type="datetime-local" class="form-control" v-model="appointment.visitTime" required>
+                    <div class="form-group">
+                        <label>预约时间</label>
+                        <input type="datetime-local" class="form-control" name="visitTime" required>
                     </div>
                     <button type="submit" class="btn btn-primary">提交预约</button>
                 </form>
@@ -66,131 +56,112 @@
         </div>
 
         <!-- 访客登记 -->
-        <div v-if="currentView === 'checkin'" class="card">
+        <div class="card">
             <div class="card-header">
-                <h5>访客登记</h5>
+                访客登记
             </div>
             <div class="card-body">
-                <form @submit.prevent="submitCheckin">
-                    <div class="mb-3">
-                        <label class="form-label">预约ID</label>
-                        <input type="number" class="form-control" v-model="checkin.appointmentId" required>
+                <form id="checkInForm">
+                    <div class="form-group">
+                        <label>预约编号</label>
+                        <input type="text" class="form-control" name="appointmentId" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">人脸照片</label>
-                        <input type="file" class="form-control" @change="handleFaceUpload" accept="image/*" required>
+                    <div class="form-group">
+                        <label>人脸采集</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="faceImage" accept="image/*">
+                            <label class="custom-file-label">选择图片</label>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">登记入场</button>
+                    <button type="submit" class="btn btn-success">登记入场</button>
                 </form>
             </div>
         </div>
 
         <!-- 访客离场 -->
-        <div v-if="currentView === 'checkout'" class="card">
+        <div class="card">
             <div class="card-header">
-                <h5>访客离场</h5>
+                访客离场
             </div>
             <div class="card-body">
-                <form @submit.prevent="submitCheckout">
-                    <div class="mb-3">
-                        <label class="form-label">访问记录ID</label>
-                        <input type="number" class="form-control" v-model="checkout.visitId" required>
+                <form id="checkOutForm">
+                    <div class="form-group">
+                        <label>访问记录ID</label>
+                        <input type="text" class="form-control" name="visitId" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">访客证号</label>
-                        <input type="text" class="form-control" v-model="checkout.cardNo" required>
+                    <div class="form-group">
+                        <label>访客证号</label>
+                        <input type="text" class="form-control" name="cardNo" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">登记离场</button>
+                    <button type="submit" class="btn btn-warning">登记离场</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.31"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        const app = Vue.createApp({
-            data() {
-                return {
-                    currentView: 'appointment',
-                    appointment: {
-                        visitorName: '',
-                        visitorPhone: '',
-                        visitorIdCard: '',
-                        employeeId: '',
-                        visitPurpose: '',
-                        visitTime: ''
-                    },
-                    checkin: {
-                        appointmentId: '',
-                        faceImage: ''
-                    },
-                    checkout: {
-                        visitId: '',
-                        cardNo: ''
-                    }
+        // 预约表单提交
+        $('#appointmentForm').submit(function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/api/v1/appointments', {
+                method: 'POST',
+                body: JSON.stringify(Object.fromEntries(formData)),
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            },
-            methods: {
-                async submitAppointment() {
-                    try {
-                        const response = await axios.post('/api/v1/appointments', this.appointment);
-                        alert('预约成功！预约ID：' + response.data.data.appointmentId);
-                        this.resetForm('appointment');
-                    } catch (error) {
-                        alert('预约失败：' + error.message);
-                    }
-                },
-                async submitCheckin() {
-                    try {
-                        const response = await axios.post('/api/v1/visits/check-in', this.checkin);
-                        alert('登记成功！访客证号：' + response.data.data.cardNo);
-                        this.resetForm('checkin');
-                    } catch (error) {
-                        alert('登记失败：' + error.message);
-                    }
-                },
-                async submitCheckout() {
-                    try {
-                        const response = await axios.post('/api/v1/visits/check-out', this.checkout);
-                        alert('离场登记成功！离场时间：' + response.data.data.checkOutTime);
-                        this.resetForm('checkout');
-                    } catch (error) {
-                        alert('离场登记失败：' + error.message);
-                    }
-                },
-                handleFaceUpload(event) {
-                    const file = event.target.files[0];
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        this.checkin.faceImage = e.target.result.split(',')[1];
-                    };
-                    reader.readAsDataURL(file);
-                },
-                resetForm(formType) {
-                    if (formType === 'appointment') {
-                        this.appointment = {
-                            visitorName: '',
-                            visitorPhone: '',
-                            visitorIdCard: '',
-                            employeeId: '',
-                            visitPurpose: '',
-                            visitTime: ''
-                        };
-                    } else if (formType === 'checkin') {
-                        this.checkin = {
-                            appointmentId: '',
-                            faceImage: ''
-                        };
-                    } else if (formType === 'checkout') {
-                        this.checkout = {
-                            visitId: '',
-                            cardNo: ''
-                        };
-                    }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('预约成功，预约ID：' + data.data.appointmentId);
+            })
+            .catch(error => {
+                alert('预约失败：' + error);
+            });
+        });
+
+        // 访客登记表单提交
+        $('#checkInForm').submit(function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/api/v1/visits/check-in', {
+                method: 'POST',
+                body: JSON.stringify(Object.fromEntries(formData)),
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            }
-        }).mount('#app');
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('登记成功，访客证号：' + data.data.cardNo);
+            })
+            .catch(error => {
+                alert('登记失败：' + error);
+            });
+        });
+
+        // 访客离场表单提交
+        $('#checkOutForm').submit(function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/api/v1/visits/check-out', {
+                method: 'POST',
+                body: JSON.stringify(Object.fromEntries(formData)),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('离场登记成功');
+            })
+            .catch(error => {
+                alert('离场登记失败：' + error);
+            });
+        });
     </script>
 </body>
 </html>
