@@ -12,56 +12,70 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        .record-container {
-            margin: 30px auto;
-            padding: 20px;
-        }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand" href="#">访客管理系统</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#visitor-register">访客登记</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#visit-records">访问记录</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
-    <div class="form-container">
-        <h4>访客登记</h4>
-        <form id="visitorForm">
-            <div class="mb-3">
-                <label class="form-label">访客姓名</label>
-                <input type="text" class="form-control" name="name" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">手机号码</label>
-                <input type="tel" class="form-control" name="mobile" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">身份证号</label>
-                <input type="text" class="form-control" name="idCard" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">人脸照片</label>
-                <input type="file" class="form-control" name="faceImage" accept="image/*">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">来访目的</label>
-                <textarea class="form-control" name="purpose" rows="3" required></textarea>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">被访员工</label>
-                <select class="form-control" name="employeeId" required>
-                    <option value="">请选择</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">提交</button>
-        </form>
-    </div>
+    <div class="container">
+        <div class="form-container" id="visitor-register">
+            <h3 class="mb-4">访客登记</h3>
+            <form id="visitorForm">
+                <div class="mb-3">
+                    <label class="form-label">访客姓名</label>
+                    <input type="text" class="form-control" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">手机号</label>
+                    <input type="tel" class="form-control" name="mobile" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">身份证号</label>
+                    <input type="text" class="form-control" name="idCard" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">人脸照片</label>
+                    <input type="file" class="form-control" name="faceImage" accept="image/*">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">来访目的</label>
+                    <textarea class="form-control" name="purpose" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">被访员工</label>
+                    <select class="form-control" name="employeeId" required>
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">提交</button>
+            </form>
+        </div>
 
-    <div class="record-container">
-        <h4>访问记录</h4>
-        <div class="table-responsive">
-            <table class="table table-striped">
+        <div class="form-container" id="visit-records">
+            <h3 class="mb-4">访问记录查询</h3>
+            <div class="mb-3">
+                <input type="date" class="form-control mb-2" id="startTime">
+                <input type="date" class="form-control" id="endTime">
+            </div>
+            <button class="btn btn-primary mb-3" onclick="queryRecords()">查询</button>
+            <table class="table">
                 <thead>
                     <tr>
                         <th>访客姓名</th>
@@ -71,53 +85,59 @@
                         <th>状态</th>
                     </tr>
                 </thead>
-                <tbody id="recordsList"></tbody>
+                <tbody id="recordsTable">
+                </tbody>
             </table>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.getElementById('visitorForm').addEventListener('submit', function(e) {
+        document.getElementById('visitorForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const formData = new FormData(this);
-            
-            fetch('/api/visitor/register', {
-                method: 'POST',
-                body: JSON.stringify(Object.fromEntries(formData)),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
+            const formData = new FormData(e.target);
+            try {
+                const response = await fetch('/api/visitor/register', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
                 if(data.code === 200) {
                     alert('登记成功');
-                    loadRecords();
-                } else {
-                    alert('登记失败：' + data.message);
                 }
-            });
+            } catch(err) {
+                console.error(err);
+                alert('登记失败');
+            }
         });
 
-        function loadRecords() {
-            fetch('/api/visit/records')
-            .then(response => response.json())
-            .then(data => {
-                const tbody = document.getElementById('recordsList');
-                tbody.innerHTML = data.data.map(record => `
-                    <tr>
-                        <td>${record.visitorName}</td>
-                        <td>${record.employeeName}</td>
-                        <td>${record.visitTime}</td>
-                        <td>${record.leaveTime || '-'}</td>
-                        <td>${record.status === 0 ? '在访' : '已离开'}</td>
-                    </tr>
-                `).join('');
-            });
+        async function queryRecords() {
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+            try {
+                const response = await fetch(`/api/visit/records?startTime=${startTime}&endTime=${endTime}`);
+                const data = await response.json();
+                if(data.code === 200) {
+                    renderRecords(data.data);
+                }
+            } catch(err) {
+                console.error(err);
+                alert('查询失败');
+            }
         }
 
-        loadRecords();
+        function renderRecords(records) {
+            const tbody = document.getElementById('recordsTable');
+            tbody.innerHTML = records.map(record => `
+                <tr>
+                    <td>${record.visitorName}</td>
+                    <td>${record.employeeName}</td>
+                    <td>${record.visitTime}</td>
+                    <td>${record.leaveTime || '-'}</td>
+                    <td>${record.status === 0 ? '在访' : '已离开'}</td>
+                </tr>
+            `).join('');
+        }
     </script>
 </body>
 </html>
