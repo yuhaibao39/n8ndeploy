@@ -1,141 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>访客管理系统</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.15.7/lib/theme-chalk/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdn.jsdelivr.net/npm/element-ui@2.15.7/lib/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <div class="container mt-4">
-        <!-- 访客登记表单 -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5>访客登记</h5>
-            </div>
-            <div class="card-body">
-                <form id="visitorForm">
-                    <div class="form-group">
-                        <label>访客姓名</label>
-                        <input type="text" class="form-control" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label>手机号</label>
-                        <input type="tel" class="form-control" name="mobile" required>
-                    </div>
-                    <div class="form-group">
-                        <label>身份证号</label>
-                        <input type="text" class="form-control" name="idCard" required>
-                    </div>
-                    <div class="form-group">
-                        <label>人脸照片</label>
-                        <input type="file" class="form-control-file" name="faceImage" accept="image/*">
-                    </div>
-                    <div class="form-group">
-                        <label>来访目的</label>
-                        <textarea class="form-control" name="purpose" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>被访员工</label>
-                        <select class="form-control" name="employeeId" required>
-                            <option value="">请选择员工</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">提交</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- 访问记录查询 -->
-        <div class="card">
-            <div class="card-header">
-                <h5>访问记录查询</h5>
-            </div>
-            <div class="card-body">
-                <form id="searchForm" class="mb-3">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <input type="date" class="form-control" name="startTime">
-                        </div>
-                        <div class="col-md-3">
-                            <input type="date" class="form-control" name="endTime">
-                        </div>
-                        <div class="col-md-3">
-                            <button type="submit" class="btn btn-primary">查询</button>
-                        </div>
-                    </div>
-                </form>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>访客姓名</th>
-                            <th>被访员工</th>
-                            <th>来访时间</th>
-                            <th>离开时间</th>
-                            <th>状态</th>
-                        </tr>
-                    </thead>
-                    <tbody id="recordsTable">
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div id="app">
+        <el-container>
+            <el-header>
+                <h2>访客管理系统</h2>
+            </el-header>
+            <el-main>
+                <el-tabs v-model="activeTab">
+                    <el-tab-pane label="访客登记" name="register">
+                        <el-form :model="visitorForm" :rules="rules" ref="visitorForm" label-width="100px">
+                            <el-form-item label="姓名" prop="name">
+                                <el-input v-model="visitorForm.name"></el-input>
+                            </el-form-item>
+                            <el-form-item label="手机号" prop="mobile">
+                                <el-input v-model="visitorForm.mobile"></el-input>
+                            </el-form-item>
+                            <el-form-item label="身份证号" prop="idCard">
+                                <el-input v-model="visitorForm.idCard"></el-input>
+                            </el-form-item>
+                            <el-form-item label="人脸照片" prop="faceImage">
+                                <el-upload
+                                    action="/api/upload"
+                                    :on-success="handleUploadSuccess"
+                                    :before-upload="beforeUpload">
+                                    <el-button size="small" type="primary">点击上传</el-button>
+                                </el-upload>
+                            </el-form-item>
+                            <el-form-item label="来访目的" prop="purpose">
+                                <el-input type="textarea" v-model="visitorForm.purpose"></el-input>
+                            </el-form-item>
+                            <el-form-item label="被访员工" prop="employeeId">
+                                <el-select v-model="visitorForm.employeeId" placeholder="请选择">
+                                    <el-option
+                                        v-for="item in employees"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="submitForm">提交</el-button>
+                                <el-button @click="resetForm">重置</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-tab-pane>
+                    
+                    <el-tab-pane label="访问记录" name="records">
+                        <el-form :inline="true" :model="queryForm">
+                            <el-form-item>
+                                <el-date-picker
+                                    v-model="queryForm.timeRange"
+                                    type="daterange"
+                                    range-separator="至"
+                                    start-placeholder="开始日期"
+                                    end-placeholder="结束日期">
+                                </el-date-picker>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="searchRecords">查询</el-button>
+                            </el-form-item>
+                        </el-form>
+                        
+                        <el-table :data="visitRecords">
+                            <el-table-column prop="visitorName" label="访客姓名"></el-table-column>
+                            <el-table-column prop="employeeName" label="被访员工"></el-table-column>
+                            <el-table-column prop="visitTime" label="来访时间"></el-table-column>
+                            <el-table-column prop="leaveTime" label="离开时间"></el-table-column>
+                            <el-table-column prop="status" label="状态">
+                                <template slot-scope="scope">
+                                    {{scope.row.status === 0 ? '在访' : '已离开'}}
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </el-tab-pane>
+                </el-tabs>
+            </el-main>
+        </el-container>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
-        // 访客登记提交
-        $('#visitorForm').on('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            
-            $.ajax({
-                url: '/api/visitor/register',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(res) {
-                    if(res.code === 200) {
-                        alert('登记成功');
-                        getPassCode(res.data.visitorId);
-                    }
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    activeTab: 'register',
+                    visitorForm: {
+                        name: '',
+                        mobile: '',
+                        idCard: '',
+                        faceImage: '',
+                        purpose: '',
+                        employeeId: ''
+                    },
+                    rules: {
+                        name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+                        mobile: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
+                        idCard: [{ required: true, message: '请输入身份证号', trigger: 'blur' }],
+                        purpose: [{ required: true, message: '请输入来访目的', trigger: 'blur' }],
+                        employeeId: [{ required: true, message: '请选择被访员工', trigger: 'change' }]
+                    },
+                    employees: [],
+                    queryForm: {
+                        timeRange: []
+                    },
+                    visitRecords: []
                 }
-            });
-        });
-
-        // 获取通行码
-        function getPassCode(visitorId) {
-            $.post(`/api/visitor/pass-code/${visitorId}`, function(res) {
-                if(res.code === 200) {
-                    alert(`通行码: ${res.data.passCode}\n有效期至: ${res.data.expireTime}`);
-                }
-            });
-        }
-
-        // 查询访问记录
-        $('#searchForm').on('submit', function(e) {
-            e.preventDefault();
-            const params = $(this).serialize();
-            
-            $.get(`/api/visit/records?${params}`, function(res) {
-                if(res.code === 200) {
-                    const records = res.data;
-                    let html = '';
-                    records.forEach(record => {
-                        html += `
-                            <tr>
-                                <td>${record.visitorName}</td>
-                                <td>${record.employeeName}</td>
-                                <td>${record.visitTime}</td>
-                                <td>${record.leaveTime || '-'}</td>
-                                <td>${record.status === 0 ? '在访' : '已离开'}</td>
-                            </tr>
-                        `;
+            },
+            methods: {
+                submitForm() {
+                    this.$refs.visitorForm.validate((valid) => {
+                        if (valid) {
+                            axios.post('/api/visitor/register', this.visitorForm)
+                                .then(response => {
+                                    if (response.data.code === 200) {
+                                        this.$message.success('登记成功');
+                                        this.resetForm();
+                                    }
+                                })
+                                .catch(error => {
+                                    this.$message.error('登记失败');
+                                });
+                        }
                     });
-                    $('#recordsTable').html(html);
+                },
+                resetForm() {
+                    this.$refs.visitorForm.resetFields();
+                },
+                handleUploadSuccess(response) {
+                    this.visitorForm.faceImage = response.data;
+                },
+                beforeUpload(file) {
+                    const isImage = file.type.startsWith('image/');
+                    if (!isImage) {
+                        this.$message.error('请上传图片文件');
+                    }
+                    return isImage;
+                },
+                searchRecords() {
+                    const params = {
+                        startTime: this.queryForm.timeRange[0],
+                        endTime: this.queryForm.timeRange[1]
+                    };
+                    axios.get('/api/visit/records', { params })
+                        .then(response => {
+                            if (response.data.code === 200) {
+                                this.visitRecords = response.data.data;
+                            }
+                        });
                 }
-            });
+            },
+            mounted() {
+                // 加载员工列表
+                axios.get('/api/employees')
+                    .then(response => {
+                        if (response.data.code === 200) {
+                            this.employees = response.data.data;
+                        }
+                    });
+            }
         });
     </script>
 </body>
