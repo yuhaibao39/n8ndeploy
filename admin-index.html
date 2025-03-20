@@ -1,10 +1,10 @@
-基于设计文档，生成优化后的前端核心代码:
+基于概要设计文档，生成对应的前端 Vue3 + TypeScript 源代码:
 
 ```typescript
 // types/index.ts
 interface Banner {
   id: number;
-  imageUrl: string; 
+  imageUrl: string;
   linkUrl: string;
 }
 
@@ -27,101 +27,108 @@ interface HomeData {
   hotProducts: Product[];
 }
 
-// store/home.ts
-import { defineStore } from 'pinia'
+// api/index.ts
+import axios from 'axios';
 
-export const useHomeStore = defineStore('home', {
-  state: () => ({
-    loading: false,
-    homeData: null as HomeData | null,
-  }),
-  actions: {
-    async fetchHomeData() {
-      this.loading = true
-      try {
-        const cache = await cacheStore.get('homeData')
-        if (cache) {
-          this.homeData = cache
-          return
-        }
-        const { data } = await axios.get('/api/v1/home')
-        this.homeData = data
-        await cacheStore.set('homeData', data)
-      } finally {
-        this.loading = false
-      }
-    }
-  }
-})
+export const getHomeData = () => {
+  return axios.get<HomeData>('/api/v1/home');
+}
 
-// components/HomeSkeletons.vue
+export const addToCart = (productId: number, quantity: number) => {
+  return axios.post('/api/v1/cart', { productId, quantity });
+}
+
+// components/BannerSlider.vue
 <template>
-  <div class="skeleton-wrapper">
-    <div class="banner-skeleton"></div>
-    <div class="categories-skeleton">
-      <div v-for="i in 5" :key="i" class="category-item-skeleton"></div>
-    </div>
-    <div class="products-skeleton">
-      <div v-for="i in 4" :key="i" class="product-item-skeleton"></div>
-    </div>
-  </div>
+  <el-carousel height="400px">
+    <el-carousel-item v-for="banner in banners" :key="banner.id">
+      <a :href="banner.linkUrl">
+        <img :src="banner.imageUrl" class="banner-img">
+      </a>
+    </el-carousel-item>
+  </el-carousel>
 </template>
 
-// views/Home.vue
-<template>
-  <div class="home">
-    <HomeSkeletons v-if="homeStore.loading" />
-    <template v-else>
-      <swiper :banners="homeStore.homeData?.banners" />
-      
-      <div class="categories">
-        <lazy-component v-for="category in homeStore.homeData?.categories"
-          :key="category.id">
-          <CategoryItem :category="category" />
-        </lazy-component>
-      </div>
+<script setup lang="ts">
+defineProps<{
+  banners: Banner[]
+}>();
+</script>
 
-      <div class="products">
-        <lazy-component v-for="product in homeStore.homeData?.hotProducts" 
-          :key="product.id">
-          <ProductCard :product="product" />
-        </lazy-component>
-      </div>
-    </template>
+// components/CategoryList.vue
+<template>
+  <div class="category-list">
+    <div v-for="category in categories" :key="category.id" class="category-item">
+      <img :src="category.iconUrl" class="category-icon">
+      <span>{{ category.name }}</span>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useHomeStore } from '@/store/home'
-import { onMounted } from 'vue'
-
-const homeStore = useHomeStore()
-
-onMounted(() => {
-  homeStore.fetchHomeData()
-}) 
+defineProps<{
+  categories: Category[]
+}>();
 </script>
 
-<style lang="scss">
-.home {
-  /* 响应式布局 */
-  @media (max-width: 768px) {
-    .categories {
-      grid-template-columns: repeat(3, 1fr);
-    }
-    .products {
-      grid-template-columns: repeat(2, 1fr); 
-    }
-  }
+// components/ProductList.vue
+<template>
+  <div class="product-list">
+    <div v-for="product in products" :key="product.id" class="product-card">
+      <img :src="product.imageUrl" class="product-img">
+      <h3>{{ product.name }}</h3>
+      <p class="price">¥{{ product.price }}</p>
+      <el-button @click="addToCart(product.id)">加入购物车</el-button>
+    </div>
+  </div>
+</template>
 
-  @media (min-width: 769px) {
-    .categories {
-      grid-template-columns: repeat(5, 1fr);
-    }
-    .products {
-      grid-template-columns: repeat(4, 1fr);
-    }
+<script setup lang="ts">
+import { addToCart } from '../api';
+
+defineProps<{
+  products: Product[]
+}>();
+
+const handleAddToCart = async (productId: number) => {
+  try {
+    await addToCart(productId, 1);
+    ElMessage.success('添加成功');
+  } catch (error) {
+    ElMessage.error('添加失败');
   }
-}
-</style>
+};
+</script>
+
+// views/Home.vue
+<template>
+  <div class="home">
+    <BannerSlider :banners="homeData.banners" />
+    <CategoryList :categories="homeData.categories" />
+    <ProductList :products="homeData.hotProducts" />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { getHomeData } from '../api';
+import BannerSlider from '../components/BannerSlider.vue';
+import CategoryList from '../components/CategoryList.vue';
+import ProductList from '../components/ProductList.vue';
+
+const homeData = ref<HomeData>({
+  banners: [],
+  categories: [],
+  hotProducts: []
+});
+
+onMounted(async () => {
+  try {
+    const { data } = await getHomeData();
+    homeData.value = data;
+  } catch (error) {
+    console.error('Failed to fetch home data:', error);
+  }
+});
+</script>
 ```
