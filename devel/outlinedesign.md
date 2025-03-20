@@ -18,35 +18,38 @@ Visitor {
   updateTime: datetime
 }
 
-// 访问申请
-VisitApplication {
-  id: string (PK) 
+// 预约信息
+Appointment {
+  id: string (PK)
   visitorId: string (FK)
-  employeeId: string (FK)
+  employeeId: string (FK)  
   visitStartTime: datetime
   visitEndTime: datetime
   visitArea: string[]
-  status: int
+  status: int // 0-待审批 1-已通过 2-已拒绝
   createTime: datetime
   updateTime: datetime
 }
 
-// 员工信息
+// 员工信息 
 Employee {
   id: string (PK)
   name: string
-  department: string
   phone: string
   email: string
+  department: string
+  building: string
 }
 
 // 访问记录
 VisitRecord {
-  id: string (PK)
-  applicationId: string (FK)
-  checkInTime: datetime  
-  checkOutTime: datetime
-  status: int // 0-未入场 1-已入场 2-已离场
+  id: string (PK) 
+  appointmentId: string (FK)
+  actualStartTime: datetime
+  actualEndTime: datetime
+  status: int // 0-未到访 1-已到访 2-已结束
+  createTime: datetime
+  updateTime: datetime
 }
 ```
 
@@ -54,52 +57,58 @@ VisitRecord {
 
 ```mermaid
 erDiagram
-    Visitor ||--o{ VisitApplication : submits
-    Employee ||--o{ VisitApplication : approves
-    VisitApplication ||--o| VisitRecord : generates
+    Visitor ||--o{ Appointment : creates
+    Employee ||--o{ Appointment : approves  
+    Appointment ||--o| VisitRecord : generates
 ```
 
 ## 3. 核心流程时序图
 
-### 3.1 访客申请流程
-
+### 3.1 访客预约流程 
 ```mermaid
 sequenceDiagram
-    访客->>系统: 提交访问申请
+    访客->>系统: 填写预约信息
     系统->>员工: 发送审批通知
     员工->>系统: 审批处理
-    系统->>访客: 返回审批结果
-    访客->>门禁系统: 到访登记
-    门禁系统->>系统: 记录访问信息
+    系统->>访客: 反馈预约结果
 ```
 
-### 3.2 访客签离流程
-
+### 3.2 来访登记流程
 ```mermaid
 sequenceDiagram
-    访客->>门禁系统: 签离登记
-    门禁系统->>系统: 更新访问记录
-    系统->>员工: 发送访问结束通知
+    访客->>前台: 出示预约信息
+    前台->>系统: 核实预约
+    系统->>前台: 确认通过
+    前台->>访客: 发放访客卡
+    系统->>员工: 通知访客到达
 ```
 
-## 4. 接口定义
+### 3.3 离访登记流程
+```mermaid
+sequenceDiagram
+    访客->>前台: 归还访客卡
+    前台->>系统: 登记离访
+    系统->>员工: 通知访客离开
+```
+
+## 4. 接口设计
 
 ### 4.1 访客接口
 ```
-POST /api/visitor/apply
-GET /api/visitor/list
-PUT /api/visitor/{id}/status
+POST /api/visitor/register      // 访客注册
+POST /api/visitor/appointment   // 预约申请
+GET  /api/visitor/status       // 查询状态
 ```
 
-### 4.2 审批接口
+### 4.2 员工接口
 ```
-POST /api/approval/process
-GET /api/approval/list
+POST /api/employee/approve     // 审批处理
+GET  /api/employee/appointments // 获取待审批列表
 ```
 
-### 4.3 访问记录接口
+### 4.3 前台接口
 ```
-POST /api/visit/checkin
-POST /api/visit/checkout
-GET /api/visit/records
+POST /api/reception/checkin   // 来访登记
+POST /api/reception/checkout  // 离访登记
+GET  /api/reception/records   // 查询记录
 ```
