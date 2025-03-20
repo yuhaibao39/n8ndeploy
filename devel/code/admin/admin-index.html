@@ -1,43 +1,47 @@
-我理解这是一个访客系统的概要设计文档,需要生成对应的前端代码。我将基于 Vue 3 + TypeScript 生成关键代码文件。
+我将基于这个概要设计文档生成前端源代码。我会使用 React + TypeScript + Ant Design 来实现。
 
-以下是文件结构:
+以下是主要文件结构:
 
 ```
 src/
-├── api/
-│   ├── appointment.ts
-│   ├── user.ts
-│   └── visit.ts
-├── components/
-│   ├── AppointmentForm.vue 
-│   ├── VisitorCheckIn.vue
-│   └── VisitorList.vue
-├── types/
-│   └── index.ts
-├── views/
-│   ├── AppointmentView.vue
-│   ├── CheckInView.vue
-│   └── HomeView.vue
-├── store/
-│   └── index.ts
-└── router/
-    └── index.ts
+  ├── components/      # 组件
+  ├── pages/          # 页面
+  ├── services/       # API服务
+  ├── types/          # TypeScript类型定义
+  ├── utils/          # 工具函数
+  ├── App.tsx         # 根组件
+  └── index.tsx       # 入口文件
 ```
 
-由于内容较多,我将生成一个包含所有代码的zip文件并转为base64字符串:
+开始生成关键代码文件:
 
-[Base64 encoded zip file content...]
-
-关键代码示例:
+1. 首先是类型定义 (types/index.ts):
 
 ```typescript
-// types/index.ts
+export enum UserType {
+  EMPLOYEE = 'EMPLOYEE',
+  VISITOR = 'VISITOR',
+  ADMIN = 'ADMIN'
+}
+
+export enum UserStatus {
+  NORMAL = 'NORMAL',
+  DISABLED = 'DISABLED'
+}
+
+export enum AppointmentStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED'
+}
+
 export interface User {
   userId: string;
   name: string;
   phone: string;
-  type: 'EMPLOYEE' | 'VISITOR' | 'ADMIN';
-  status: 'NORMAL' | 'DISABLED';
+  type: UserType;
+  status: UserStatus;
+  createTime: string;
 }
 
 export interface Appointment {
@@ -47,53 +51,186 @@ export interface Appointment {
   visitTime: string;
   leaveTime: string;
   purpose: string;
-  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  status: AppointmentStatus;
 }
-
-// api/appointment.ts
-import request from '@/utils/request'
-
-export function createAppointment(data: Partial<Appointment>) {
-  return request({
-    url: '/api/v1/appointments',
-    method: 'post',
-    data
-  })
-}
-
-// components/AppointmentForm.vue
-<template>
-  <el-form :model="form" label-width="120px">
-    <el-form-item label="访问时间">
-      <el-date-picker v-model="form.visitTime" type="datetime" />
-    </el-form-item>
-    <el-form-item label="访问目的">
-      <el-input v-model="form.purpose" type="textarea" />
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit">提交预约</el-button>
-    </el-form-item>
-  </el-form>
-</template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-import { createAppointment } from '@/api/appointment'
-
-const form = ref({
-  visitTime: '',
-  purpose: ''
-})
-
-const onSubmit = async () => {
-  try {
-    await createAppointment(form.value)
-    ElMessage.success('预约提交成功')
-  } catch (error) {
-    ElMessage.error('预约提交失败')
-  }
-}
-</script>
 ```
 
-请问您是否需要某个具体模块的详细代码,或者需要调整某些功能的实现?
+2. API服务 (services/api.ts):
+
+```typescript
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: '/api/v1'
+});
+
+export const appointmentAPI = {
+  create: (data: any) => api.post('/appointments', data),
+  get: (id: string) => api.get(`/appointments/${id}`),
+  approve: (id: string) => api.put(`/appointments/${id}/approve`),
+  reject: (id: string) => api.put(`/appointments/${id}/reject`)
+};
+
+export const visitAPI = {
+  checkIn: (data: any) => api.post('/visits/check-in', data),
+  checkOut: (recordId: string) => api.post('/visits/check-out', { recordId })
+};
+```
+
+3. 访客预约表单组件 (components/AppointmentForm.tsx):
+
+```typescript
+import React from 'react';
+import { Form, Input, DatePicker, Button } from 'antd';
+import { appointmentAPI } from '../services/api';
+
+const AppointmentForm: React.FC = () => {
+  const [form] = Form.useForm();
+
+  const onFinish = async (values: any) => {
+    try {
+      await appointmentAPI.create(values);
+      form.resetFields();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <Form form={form} onFinish={onFinish}>
+      <Form.Item name="visitorId" label="访客ID" rules={[{ required: true }]}>
+        <Input />
+      </Form.Item>
+      <Form.Item name="hostId" label="被访人ID" rules={[{ required: true }]}>
+        <Input />
+      </Form.Item>
+      <Form.Item name="visitTime" label="访问时间" rules={[{ required: true }]}>
+        <DatePicker showTime />
+      </Form.Item>
+      <Form.Item name="purpose" label="访问目的" rules={[{ required: true }]}>
+        <Input.TextArea />
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          提交预约
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
+
+export default AppointmentForm;
+```
+
+4. 访客登记组件 (components/CheckInForm.tsx):
+
+```typescript
+import React from 'react';
+import { Form, Input, Upload, Button } from 'antd';
+import { visitAPI } from '../services/api';
+
+const CheckInForm: React.FC = () => {
+  const [form] = Form.useForm();
+
+  const onFinish = async (values: any) => {
+    try {
+      await visitAPI.checkIn(values);
+      form.resetFields();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <Form form={form} onFinish={onFinish}>
+      <Form.Item name="appointmentId" label="预约ID" rules={[{ required: true }]}>
+        <Input />
+      </Form.Item>
+      <Form.Item name="faceImage" label="人脸采集">
+        <Upload>
+          <Button>上传照片</Button>
+        </Upload>
+      </Form.Item>
+      <Form.Item name="idCard" label="身份证号" rules={[{ required: true }]}>
+        <Input />
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          登记入场
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
+
+export default CheckInForm;
+```
+
+5. 主页面组件 (pages/Home.tsx):
+
+```typescript
+import React from 'react';
+import { Layout, Menu } from 'antd';
+import AppointmentForm from '../components/AppointmentForm';
+import CheckInForm from '../components/CheckInForm';
+
+const { Header, Content } = Layout;
+
+const Home: React.FC = () => {
+  return (
+    <Layout>
+      <Header>
+        <Menu theme="dark" mode="horizontal">
+          <Menu.Item key="1">访客预约</Menu.Item>
+          <Menu.Item key="2">访客登记</Menu.Item>
+        </Menu.Item>
+      </Header>
+      <Content style={{ padding: '50px' }}>
+        <AppointmentForm />
+        <CheckInForm />
+      </Content>
+    </Layout>
+  );
+};
+
+export default Home;
+```
+
+6. 入口文件 (App.tsx):
+
+```typescript
+import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Home from './pages/Home';
+
+const App: React.FC = () => {
+  return (
+    <BrowserRouter>
+      <Switch>
+        <Route path="/" component={Home} />
+      </Switch>
+    </BrowserRouter>
+  );
+};
+
+export default App;
+```
+
+这些是基础的前端代码实现，包含了:
+- TypeScript 类型定义
+- API 服务封装 
+- 访客预约表单
+- 访客登记表单
+- 基础页面布局
+
+要完整实现还需要:
+1. 添加更多表单验证
+2. 实现错误处理
+3. 添加Loading状态
+4. 完善路由配置
+5. 添加状态管理
+6. 实现更多功能组件
+
+由于完整代码较多,这里只展示了核心部分。需要其他功能可以继续补充。
+
+需要将代码打包成zip并转为二进制吗?
