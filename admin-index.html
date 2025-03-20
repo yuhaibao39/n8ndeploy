@@ -1,30 +1,7 @@
-我将根据概要设计文档生成前端代码。我会使用 React + TypeScript + Ant Design 技术栈来实现。
+我将根据设计文档生成前端首页的核心代码结构，使用 React + TypeScript 实现。
 
-以下是源代码结构:
-
-```
-src/
-├── api/
-│   ├── home.ts
-│   └── cart.ts
-├── components/
-│   ├── Banner/
-│   ├── CategoryList/ 
-│   ├── ProductList/
-│   └── CartButton/
-├── pages/
-│   └── Home/
-├── types/
-│   └── index.ts
-├── utils/
-│   └── request.ts
-└── App.tsx
-```
-
-生成关键代码文件:
-
-1. types/index.ts:
 ```typescript
+// src/types/index.ts
 export interface Banner {
   id: number;
   imageUrl: string;
@@ -51,172 +28,182 @@ export interface HomeData {
 }
 ```
 
-2. api/home.ts:
 ```typescript
-import request from '@/utils/request';
-import { HomeData } from '@/types';
-
-export const getHomeData = () => {
-  return request.get<HomeData>('/api/v1/home');
-}
-```
-
-3. api/cart.ts:
-```typescript
-import request from '@/utils/request';
-
-export const addToCart = (productId: number, quantity: number) => {
-  return request.post('/api/v1/cart', {
-    productId,
-    quantity 
-  });
-}
-```
-
-4. pages/Home/index.tsx:
-```typescript
+// src/pages/Home/index.tsx
 import React, { useEffect, useState } from 'react';
-import { Spin } from 'antd';
-import { getHomeData } from '@/api/home';
-import { HomeData } from '@/types';
-import Banner from '@/components/Banner';
-import CategoryList from '@/components/CategoryList';
-import ProductList from '@/components/ProductList';
+import { message } from 'antd';
+import BannerSection from './components/BannerSection';
+import CategoryList from './components/CategoryList';
+import ProductList from './components/ProductList';
+import { getHomeData, addToCart } from '../../services/api';
+import { HomeData } from '../../types';
+import styles from './index.module.less';
 
-const Home: React.FC = () => {
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<HomeData>();
+const HomePage: React.FC = () => {
+  const [loading, setLoading] = useState(true);
+  const [homeData, setHomeData] = useState<HomeData | null>(null);
 
   useEffect(() => {
     fetchHomeData();
   }, []);
 
   const fetchHomeData = async () => {
-    setLoading(true);
     try {
-      const res = await getHomeData();
-      setData(res.data);
+      setLoading(true);
+      const data = await getHomeData();
+      setHomeData(data);
+    } catch (error) {
+      message.error('加载数据失败');
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) {
-    return <Spin size="large" />;
-  }
+  const handleAddToCart = async (productId: number) => {
+    try {
+      await addToCart({ productId, quantity: 1 });
+      message.success('添加成功');
+    } catch (error) {
+      message.error('添加失败');
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="home-page">
-      <Banner data={data?.banners || []} />
-      <CategoryList data={data?.categories || []} />
-      <ProductList data={data?.hotProducts || []} />
+    <div className={styles.homePage}>
+      <BannerSection banners={homeData?.banners || []} />
+      <CategoryList categories={homeData?.categories || []} />
+      <ProductList 
+        products={homeData?.hotProducts || []} 
+        onAddToCart={handleAddToCart}
+      />
     </div>
   );
 };
 
-export default Home;
+export default HomePage;
 ```
 
-5. components/ProductList/index.tsx:
 ```typescript
+// src/components/BannerSection/index.tsx
 import React from 'react';
-import { Card, Row, Col } from 'antd';
-import { Product } from '@/types';
-import CartButton from '../CartButton';
+import { Carousel } from 'antd';
+import { Banner } from '../../types';
+import styles from './index.module.less';
 
 interface Props {
-  data: Product[];
+  banners: Banner[];
 }
 
-const ProductList: React.FC<Props> = ({ data }) => {
+const BannerSection: React.FC<Props> = ({ banners }) => {
   return (
-    <Row gutter={[16, 16]}>
-      {data.map(product => (
-        <Col span={6} key={product.id}>
-          <Card
-            cover={<img alt={product.name} src={product.imageUrl} />}
-            actions={[
-              <CartButton key="cart" productId={product.id} />
-            ]}
-          >
-            <Card.Meta
-              title={product.name}
-              description={`￥${product.price}`}
-            />
-          </Card>
-        </Col>
+    <Carousel autoplay className={styles.banner}>
+      {banners.map(banner => (
+        <div key={banner.id}>
+          <a href={banner.linkUrl}>
+            <img src={banner.imageUrl} alt="" />
+          </a>
+        </div>
       ))}
-    </Row>
+    </Carousel>
+  );
+};
+
+export default BannerSection;
+```
+
+```typescript
+// src/components/CategoryList/index.tsx
+import React from 'react';
+import { Category } from '../../types';
+import styles from './index.module.less';
+
+interface Props {
+  categories: Category[];
+}
+
+const CategoryList: React.FC<Props> = ({ categories }) => {
+  return (
+    <div className={styles.categoryList}>
+      {categories.map(category => (
+        <div key={category.id} className={styles.categoryItem}>
+          <img src={category.iconUrl} alt={category.name} />
+          <span>{category.name}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default CategoryList;
+```
+
+```typescript
+// src/components/ProductList/index.tsx
+import React from 'react';
+import { Card, Button } from 'antd';
+import { Product } from '../../types';
+import styles from './index.module.less';
+
+interface Props {
+  products: Product[];
+  onAddToCart: (productId: number) => void;
+}
+
+const ProductList: React.FC<Props> = ({ products, onAddToCart }) => {
+  return (
+    <div className={styles.productList}>
+      {products.map(product => (
+        <Card key={product.id} className={styles.productCard}>
+          <img src={product.imageUrl} alt={product.name} />
+          <h3>{product.name}</h3>
+          <p>¥{product.price.toFixed(2)}</p>
+          <Button 
+            type="primary" 
+            onClick={() => onAddToCart(product.id)}
+          >
+            加入购物车
+          </Button>
+        </Card>
+      ))}
+    </div>
   );
 };
 
 export default ProductList;
 ```
 
-6. components/CartButton/index.tsx:
 ```typescript
-import React from 'react';
-import { Button, message } from 'antd';
-import { ShoppingCartOutlined } from '@ant-design/icons';
-import { addToCart } from '@/api/cart';
+// src/services/api.ts
+import request from '../utils/request';
 
-interface Props {
-  productId: number;
-}
-
-const CartButton: React.FC<Props> = ({ productId }) => {
-  const handleClick = async () => {
-    try {
-      await addToCart(productId, 1);
-      message.success('添加成功');
-    } catch (err) {
-      message.error('添加失败');
-    }
-  };
-
-  return (
-    <Button
-      icon={<ShoppingCartOutlined />}
-      onClick={handleClick}
-    >
-      加入购物车
-    </Button>
-  );
+export const getHomeData = () => {
+  return request.get('/api/v1/home');
 };
 
-export default CartButton;
+export const addToCart = (data: { productId: number; quantity: number }) => {
+  return request.post('/api/v1/cart', data);
+};
 ```
 
-7. utils/request.ts:
-```typescript
-import axios from 'axios';
+这是基于设计文档实现的前端核心代码结构，主要包括：
 
-const request = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-  timeout: 5000
-});
+1. 类型定义
+2. 首页主组件
+3. Banner轮播组件
+4. 分类列表组件
+5. 商品列表组件
+6. API接口封装
 
-request.interceptors.response.use(
-  response => response.data,
-  error => Promise.reject(error)
-);
+代码使用了 React Hook、TypeScript 以及 Ant Design 组件库，实现了：
 
-export default request;
-```
+- 首页数据加载
+- 轮播图展示
+- 分类导航
+- 商品列表
+- 加入购物车功能
 
-这些代码文件构成了一个基础的自行车销售网站首页。主要功能包括:
+样式文件（.less）需要另外补充，这里主要展示了组件的核心结构。
 
-1. 展示Banner轮播
-2. 展示商品分类
-3. 展示热销商品列表
-4. 添加商品到购物车功能
-
-需要注意的是，这只是基础框架代码，还需要:
-
-1. 添加样式文件
-2. 完善错误处理
-3. 添加加载状态
-4. 实现响应式布局
-5. 添加测试用例
-
-我已将这些源代码文件打包成zip并转换为二进制，但由于长度限制无法在此完整展示。您可以基于这些代码框架继续开发完善。需要任何补充或修改,请告诉我。
+你需要补充什么具体功能，我可以继续完善相关代码。
