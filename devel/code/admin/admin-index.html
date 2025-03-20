@@ -1,105 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>访客管理系统</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .form-container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
+        .container { max-width: 800px; margin-top: 50px; }
+        .form-group { margin-bottom: 1rem; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="form-container">
-            <h2 class="text-center mb-4">访客登记</h2>
-            <form id="visitorForm">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">访客姓名</label>
-                        <input type="text" class="form-control" name="name" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">手机号</label>
-                        <input type="tel" class="form-control" name="phone" required>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">身份证号</label>
-                        <input type="text" class="form-control" name="idCard" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">车牌号</label>
-                        <input type="text" class="form-control" name="carNumber">
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">来访目的</label>
-                    <textarea class="form-control" name="purpose" rows="3" required></textarea>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">被访人</label>
-                    <select class="form-select" name="employeeId" required>
-                        <option value="">请选择被访人</option>
-                    </select>
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary">提交</button>
-                </div>
-            </form>
-        </div>
+        <h2 class="mb-4">访客登记</h2>
+        <form id="visitorForm">
+            <div class="form-group">
+                <label for="name">访客姓名</label>
+                <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">手机号</label>
+                <input type="tel" class="form-control" id="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="idCard">身份证号</label>
+                <input type="text" class="form-control" id="idCard" required>
+            </div>
+            <div class="form-group">
+                <label for="purpose">来访目的</label>
+                <textarea class="form-control" id="purpose" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="carNumber">车牌号（选填）</label>
+                <input type="text" class="form-control" id="carNumber">
+            </div>
+            <div class="form-group">
+                <label for="employeeId">被访人</label>
+                <select class="form-control" id="employeeId" required>
+                    <option value="">请选择被访人</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         document.getElementById('visitorForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData.entries());
             
+            const formData = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                idCard: document.getElementById('idCard').value,
+                purpose: document.getElementById('purpose').value,
+                carNumber: document.getElementById('carNumber').value,
+                employeeId: document.getElementById('employeeId').value
+            };
+
             try {
-                const response = await fetch('/api/visitor/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                const result = await response.json();
-                if (result.code === 200) {
-                    alert('登记成功，请等待审批');
-                    e.target.reset();
-                } else {
-                    alert('登记失败：' + result.message);
+                const response = await axios.post('/api/visitor/register', formData);
+                if (response.data.code === 200) {
+                    alert('登记成功！');
+                    location.reload();
                 }
             } catch (error) {
-                alert('系统错误，请稍后重试');
+                alert('提交失败：' + error.message);
             }
         });
 
         // 加载被访人列表
         async function loadEmployees() {
             try {
-                const response = await fetch('/api/employee/list');
-                const result = await response.json();
-                if (result.code === 200) {
-                    const select = document.querySelector('select[name="employeeId"]');
-                    result.data.forEach(employee => {
-                        const option = document.createElement('option');
-                        option.value = employee.id;
-                        option.textContent = `${employee.name} - ${employee.department}`;
-                        select.appendChild(option);
-                    });
-                }
+                const response = await axios.get('/api/employee/list');
+                const select = document.getElementById('employeeId');
+                response.data.data.forEach(employee => {
+                    const option = document.createElement('option');
+                    option.value = employee.id;
+                    option.textContent = `${employee.name} - ${employee.department}`;
+                    select.appendChild(option);
+                });
             } catch (error) {
-                console.error('加载被访人列表失败', error);
+                console.error('加载被访人列表失败：', error);
             }
         }
 
