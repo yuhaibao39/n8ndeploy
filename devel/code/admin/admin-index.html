@@ -1,135 +1,292 @@
-这是一个访客系统的概要设计文档,我将为您生成对应的前端代码结构：
+我将基于这个概要设计文档创建前端代码结构。我会使用 Vue3 + TypeScript + Element Plus 来实现。
 
-1. 首先创建项目基础结构:
+以下是主要的代码结构:
+
+```plaintext
+src/
+├── api/
+│   ├── visitor.ts
+│   ├── visit.ts
+│   ├── company.ts
+│   └── employee.ts
+├── components/
+│   ├── VisitorForm.vue
+│   ├── VisitForm.vue 
+│   ├── ApprovalFlow.vue
+│   └── FaceVerify.vue
+├── views/
+│   ├── visitor/
+│   │   ├── List.vue
+│   │   └── Detail.vue
+│   ├── visit/
+│   │   ├── Apply.vue
+│   │   └── Approval.vue
+│   └── dashboard/
+│       └── Index.vue
+├── router/
+│   └── index.ts
+├── store/
+│   └── index.ts
+├── types/
+│   └── index.ts
+└── utils/
+    ├── request.ts
+    └── validate.ts
 ```
-visitor-system/
-  ├── src/
-  │   ├── api/
-  │   ├── assets/
-  │   ├── components/
-  │   ├── router/
-  │   ├── store/
-  │   ├── views/
-  │   └── App.vue
-  ├── package.json
-  └── vite.config.js
+
+让我们逐个实现关键文件:
+
+1. 首先是类型定义 (types/index.ts):
+
+```typescript
+// 访客类型定义
+export interface Visitor {
+  visitor_id: string;
+  name: string;
+  mobile: string;
+  id_card: string;
+  face_photo: string;
+  visitor_type: number;
+  create_time: string;
+  status: number;
+}
+
+// 访问申请类型定义
+export interface Visit {
+  visit_id: string;
+  visitor_id: string;
+  employee_id: string;
+  visit_time: string;
+  leave_time: string;
+  visit_area: string;
+  purpose: string;
+  status: number;
+  create_time: string;
+}
+
+// API响应类型
+export interface ApiResponse<T> {
+  code: number;
+  data: T;
+  message: string;
+}
 ```
 
-2. 主要源码文件:
+2. API请求封装 (api/visitor.ts):
 
-api/visitor.js:
-```javascript
+```typescript
 import request from '@/utils/request'
+import type { Visitor, ApiResponse } from '@/types'
 
-export function getVisitorList(params) {
-  return request({
-    url: '/api/v1/visitors/list',
-    method: 'get',
-    params
-  })
-}
-
-export function createVisitor(data) {
-  return request({
-    url: '/api/v1/visitors',
-    method: 'post', 
-    data
-  })
-}
-
-// 其他访客相关API...
-```
-
-views/visitor/List.vue:
-```vue
-<template>
-  <div class="visitor-list">
-    <el-table :data="visitorList">
-      <el-table-column prop="name" label="访客姓名"/>
-      <el-table-column prop="mobile" label="手机号"/>
-      <el-table-column prop="visitorType" label="访客类型"/>
-      <el-table-column prop="status" label="状态"/>
-    </el-table>
-  </div>
-</template>
-
-<script>
-import { getVisitorList } from '@/api/visitor'
-
-export default {
-  data() {
-    return {
-      visitorList: []
-    }
+export const visitorApi = {
+  // 创建访客
+  create(data: Partial<Visitor>) {
+    return request.post<ApiResponse<Visitor>>('/api/v1/visitors', data)
   },
-  methods: {
-    loadVisitors() {
-      getVisitorList().then(res => {
-        this.visitorList = res.data
-      })
-    }
+
+  // 获取访客详情
+  getDetail(id: string) {
+    return request.get<ApiResponse<Visitor>>(`/api/v1/visitors/${id}`)
+  },
+
+  // 访客列表查询
+  getList(params: any) {
+    return request.get<ApiResponse<Visitor[]>>('/api/v1/visitors/list', { params })
   }
 }
-</script>
 ```
 
-views/appointment/Form.vue:
+3. 访客表单组件 (components/VisitorForm.vue):
+
 ```vue
 <template>
-  <el-form ref="form" :model="form">
-    <el-form-item label="来访时间">
-      <el-date-picker v-model="form.visitTime"/>
+  <el-form
+    ref="formRef"
+    :model="form"
+    :rules="rules"
+    label-width="100px"
+  >
+    <el-form-item label="访客姓名" prop="name">
+      <el-input v-model="form.name" />
     </el-form-item>
-    <el-form-item label="来访目的">
-      <el-input v-model="form.purpose"/>
+    
+    <el-form-item label="手机号码" prop="mobile">
+      <el-input v-model="form.mobile" />
     </el-form-item>
-    <!-- 其他表单项 -->
+    
+    <el-form-item label="身份证号" prop="id_card">
+      <el-input v-model="form.id_card" />
+    </el-form-item>
+    
+    <el-form-item label="访客类型" prop="visitor_type">
+      <el-select v-model="form.visitor_type">
+        <el-option label="普通访客" :value="1" />
+        <el-option label="VIP访客" :value="2" />
+      </el-select>
+    </el-form-item>
+
+    <el-form-item label="人脸照片" prop="face_photo">
+      <el-upload
+        action="/api/upload"
+        :on-success="handleUploadSuccess"
+      >
+        <el-button type="primary">上传照片</el-button>
+      </el-upload>
+    </el-form-item>
+
+    <el-form-item>
+      <el-button type="primary" @click="submitForm">提交</el-button>
+    </el-form-item>
   </el-form>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      form: {
-        visitTime: '',
-        purpose: ''
-      }
-    }
+<script lang="ts" setup>
+import { ref, reactive } from 'vue'
+import type { FormInstance } from 'element-plus'
+import { visitorApi } from '@/api/visitor'
+
+const formRef = ref<FormInstance>()
+const form = reactive({
+  name: '',
+  mobile: '',
+  id_card: '',
+  visitor_type: 1,
+  face_photo: ''
+})
+
+const rules = {
+  name: [{ required: true, message: '请输入姓名' }],
+  mobile: [{ required: true, message: '请输入手机号' }],
+  id_card: [{ required: true, message: '请输入身份证号' }]
+}
+
+const handleUploadSuccess = (res: any) => {
+  form.face_photo = res.url
+}
+
+const submitForm = async () => {
+  if (!formRef.value) return
+  
+  await formRef.value.validate()
+  try {
+    await visitorApi.create(form)
+    ElMessage.success('创建成功')
+  } catch (error) {
+    ElMessage.error('创建失败')
   }
 }
 </script>
 ```
 
-router/index.js:
-```javascript
-import { createRouter, createWebHistory } from 'vue-router'
+4. 访客列表页面 (views/visitor/List.vue):
 
-const routes = [
-  {
-    path: '/visitor',
-    component: () => import('@/views/visitor/List.vue')
-  },
-  {
-    path: '/appointment',
-    component: () => import('@/views/appointment/Form.vue')
-  }
-]
+```vue
+<template>
+  <div class="visitor-list">
+    <el-card>
+      <template #header>
+        <div class="card-header">
+          <span>访客管理</span>
+          <el-button type="primary" @click="handleAdd">新增访客</el-button>
+        </div>
+      </template>
 
-export default createRouter({
-  history: createWebHistory(),
-  routes
+      <el-table :data="tableData" v-loading="loading">
+        <el-table-column prop="name" label="访客姓名" />
+        <el-table-column prop="mobile" label="手机号码" />
+        <el-table-column prop="visitor_type" label="访客类型">
+          <template #default="{ row }">
+            {{ row.visitor_type === 1 ? '普通访客' : 'VIP访客' }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="status" label="状态">
+          <template #default="{ row }">
+            {{ row.status === 1 ? '正常' : '黑名单' }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="create_time" label="创建时间" />
+        <el-table-column label="操作" width="200">
+          <template #default="{ row }">
+            <el-button link @click="handleDetail(row)">详情</el-button>
+            <el-button link type="danger" @click="handleDelete(row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <el-pagination
+        v-model:current-page="page.current"
+        v-model:page-size="page.size"
+        :total="page.total"
+        @current-change="loadData"
+      />
+    </el-card>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { ref, onMounted } from 'vue'
+import { visitorApi } from '@/api/visitor'
+import type { Visitor } from '@/types'
+
+const loading = ref(false)
+const tableData = ref<Visitor[]>([])
+const page = reactive({
+  current: 1,
+  size: 10,
+  total: 0
 })
+
+const loadData = async () => {
+  loading.value = true
+  try {
+    const res = await visitorApi.getList({
+      page: page.current,
+      size: page.size
+    })
+    tableData.value = res.data
+    page.total = res.total
+  } catch (error) {
+    ElMessage.error('加载失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  loadData()
+})
+
+const handleAdd = () => {
+  // 跳转到新增页面
+}
+
+const handleDetail = (row: Visitor) => {
+  // 跳转到详情页面
+}
+
+const handleDelete = async (row: Visitor) => {
+  try {
+    await ElMessageBox.confirm('确认删除该访客?')
+    // 调用删除API
+    ElMessage.success('删除成功')
+    loadData()
+  } catch {
+    // 取消删除
+  }
+}
+</script>
 ```
 
-我将这些代码打包成zip并转换为二进制输出。需要注意这只是基础框架代码,实际开发还需要:
+这些是核心的代码实现。完整的前端项目还需要包含:
 
-1. 完善错误处理
-2. 添加权限验证
-3. 实现数据校验
-4. 优化用户体验
-4. 添加单元测试
+1. 路由配置
+2. 状态管理
+3. 请求拦截器
+4. 工具函数
+5. 环境配置
+6. 样式文件
+7. 其他业务组件
 
-如果您需要修改或有其他要求,我可以继续优化代码。
+由于内容较多,我只展示了最核心的部分。如果你需要完整的项目代码,我可以继续补充其他模块。
 
-[二进制ZIP包数据...]
+要生成zip包的二进制输出,需要将所有代码文件打包压缩。你需要具体哪些文件的完整实现?
