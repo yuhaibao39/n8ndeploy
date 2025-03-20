@@ -3,164 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>访客系统</title>
+    <title>访客管理系统</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .form-container {
-            max-width: 600px;
-            margin: 30px auto;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div id="app" class="container mt-4">
+        <!-- 导航栏 -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">访客系统</a>
-                <div class="navbar-nav">
-                    <a class="nav-link" href="#appointment">预约登记</a>
-                    <a class="nav-link" href="#checkin">访客登记</a>
-                    <a class="nav-link" href="#checkout">访客离场</a>
+                <a class="navbar-brand" href="#">访客管理系统</a>
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" @click="currentView='appointment'">预约管理</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" @click="currentView='checkin'">访客登记</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" @click="currentView='checkout'">访客离场</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
 
-        <div id="appointment" class="form-container">
-            <h3>访客预约</h3>
-            <form id="appointmentForm">
-                <div class="mb-3">
-                    <label class="form-label">访客姓名</label>
-                    <input type="text" class="form-control" name="visitorName" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">手机号码</label>
-                    <input type="tel" class="form-control" name="visitorPhone" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">身份证号</label>
-                    <input type="text" class="form-control" name="visitorIdCard" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">被访人</label>
-                    <select class="form-control" name="employeeId" required>
-                        <option value="">请选择被访人</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">来访目的</label>
-                    <textarea class="form-control" name="visitPurpose" required></textarea>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">预约时间</label>
-                    <input type="datetime-local" class="form-control" name="visitTime" required>
-                </div>
-                <button type="submit" class="btn btn-primary">提交预约</button>
-            </form>
-        </div>
-
-        <div id="checkin" class="form-container">
-            <h3>访客登记</h3>
-            <form id="checkinForm">
-                <div class="mb-3">
-                    <label class="form-label">预约编号</label>
-                    <input type="text" class="form-control" name="appointmentId" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">人脸采集</label>
-                    <div class="d-flex flex-column align-items-center">
-                        <video id="faceVideo" width="320" height="240" style="display: none;"></video>
-                        <canvas id="faceCanvas" width="320" height="240" style="display: none;"></canvas>
-                        <button type="button" class="btn btn-secondary" onclick="startFaceCapture()">开始采集</button>
+        <!-- 预约表单 -->
+        <div v-if="currentView === 'appointment'" class="card">
+            <div class="card-header">
+                <h5>访客预约</h5>
+            </div>
+            <div class="card-body">
+                <form @submit.prevent="submitAppointment">
+                    <div class="mb-3">
+                        <label class="form-label">访客姓名</label>
+                        <input type="text" class="form-control" v-model="appointment.visitorName" required>
                     </div>
-                </div>
-                <button type="submit" class="btn btn-primary">确认登记</button>
-            </form>
+                    <div class="mb-3">
+                        <label class="form-label">手机号码</label>
+                        <input type="tel" class="form-control" v-model="appointment.visitorPhone" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">身份证号</label>
+                        <input type="text" class="form-control" v-model="appointment.visitorIdCard" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">被访人ID</label>
+                        <input type="number" class="form-control" v-model="appointment.employeeId" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">来访目的</label>
+                        <textarea class="form-control" v-model="appointment.visitPurpose" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">预约时间</label>
+                        <input type="datetime-local" class="form-control" v-model="appointment.visitTime" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">提交预约</button>
+                </form>
+            </div>
         </div>
 
-        <div id="checkout" class="form-container">
-            <h3>访客离场</h3>
-            <form id="checkoutForm">
-                <div class="mb-3">
-                    <label class="form-label">访问记录ID</label>
-                    <input type="text" class="form-control" name="visitId" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">访客证号</label>
-                    <input type="text" class="form-control" name="cardNo" required>
-                </div>
-                <button type="submit" class="btn btn-primary">确认离场</button>
-            </form>
+        <!-- 访客登记 -->
+        <div v-if="currentView === 'checkin'" class="card">
+            <div class="card-header">
+                <h5>访客登记</h5>
+            </div>
+            <div class="card-body">
+                <form @submit.prevent="submitCheckin">
+                    <div class="mb-3">
+                        <label class="form-label">预约ID</label>
+                        <input type="number" class="form-control" v-model="checkin.appointmentId" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">人脸照片</label>
+                        <input type="file" class="form-control" @change="handleFaceUpload" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">登记入场</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 访客离场 -->
+        <div v-if="currentView === 'checkout'" class="card">
+            <div class="card-header">
+                <h5>访客离场</h5>
+            </div>
+            <div class="card-body">
+                <form @submit.prevent="submitCheckout">
+                    <div class="mb-3">
+                        <label class="form-label">访问记录ID</label>
+                        <input type="number" class="form-control" v-model="checkout.visitId" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">访客证号</label>
+                        <input type="text" class="form-control" v-model="checkout.cardNo" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">登记离场</button>
+                </form>
+            </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.31"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        document.getElementById('appointmentForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            fetch('/api/v1/appointments', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+        const app = Vue.createApp({
+            data() {
+                return {
+                    currentView: 'appointment',
+                    appointment: {
+                        visitorName: '',
+                        visitorPhone: '',
+                        visitorIdCard: '',
+                        employeeId: '',
+                        visitPurpose: '',
+                        visitTime: ''
+                    },
+                    checkin: {
+                        appointmentId: '',
+                        faceImage: ''
+                    },
+                    checkout: {
+                        visitId: '',
+                        cardNo: ''
+                    }
+                }
+            },
+            methods: {
+                async submitAppointment() {
+                    try {
+                        const response = await axios.post('/api/v1/appointments', this.appointment);
+                        alert('预约成功！预约ID：' + response.data.data.appointmentId);
+                        this.resetForm('appointment');
+                    } catch (error) {
+                        alert('预约失败：' + error.message);
+                    }
                 },
-                body: JSON.stringify(Object.fromEntries(formData))
-            }).then(response => response.json())
-              .then(data => alert('预约成功，预约ID：' + data.data.appointmentId))
-              .catch(error => alert('预约失败：' + error));
-        });
-
-        document.getElementById('checkinForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            const canvas = document.getElementById('faceCanvas');
-            formData.append('faceImage', canvas.toDataURL('image/jpeg').split(',')[1]);
-            
-            fetch('/api/v1/visits/check-in', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+                async submitCheckin() {
+                    try {
+                        const response = await axios.post('/api/v1/visits/check-in', this.checkin);
+                        alert('登记成功！访客证号：' + response.data.data.cardNo);
+                        this.resetForm('checkin');
+                    } catch (error) {
+                        alert('登记失败：' + error.message);
+                    }
                 },
-                body: JSON.stringify(Object.fromEntries(formData))
-            }).then(response => response.json())
-              .then(data => alert('登记成功，访客证号：' + data.data.cardNo))
-              .catch(error => alert('登记失败：' + error));
-        });
-
-        document.getElementById('checkoutForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            fetch('/api/v1/visits/check-out', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+                async submitCheckout() {
+                    try {
+                        const response = await axios.post('/api/v1/visits/check-out', this.checkout);
+                        alert('离场登记成功！离场时间：' + response.data.data.checkOutTime);
+                        this.resetForm('checkout');
+                    } catch (error) {
+                        alert('离场登记失败：' + error.message);
+                    }
                 },
-                body: JSON.stringify(Object.fromEntries(formData))
-            }).then(response => response.json())
-              .then(data => alert('离场成功，离场时间：' + data.data.checkOutTime))
-              .catch(error => alert('离场失败：' + error));
-        });
-
-        function startFaceCapture() {
-            const video = document.getElementById('faceVideo');
-            const canvas = document.getElementById('faceCanvas');
-            
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(stream => {
-                    video.style.display = 'block';
-                    video.srcObject = stream;
-                    video.play();
-                    
-                    setTimeout(() => {
-                        canvas.style.display = 'block';
-                        canvas.getContext('2d').drawImage(video, 0, 0, 320, 240);
-                        video.style.display = 'none';
-                        stream.getTracks().forEach(track => track.stop());
-                    }, 3000);
-                })
-                .catch(error => alert('无法访问摄像头：' + error));
-        }
+                handleFaceUpload(event) {
+                    const file = event.target.files[0];
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.checkin.faceImage = e.target.result.split(',')[1];
+                    };
+                    reader.readAsDataURL(file);
+                },
+                resetForm(formType) {
+                    if (formType === 'appointment') {
+                        this.appointment = {
+                            visitorName: '',
+                            visitorPhone: '',
+                            visitorIdCard: '',
+                            employeeId: '',
+                            visitPurpose: '',
+                            visitTime: ''
+                        };
+                    } else if (formType === 'checkin') {
+                        this.checkin = {
+                            appointmentId: '',
+                            faceImage: ''
+                        };
+                    } else if (formType === 'checkout') {
+                        this.checkout = {
+                            visitId: '',
+                            cardNo: ''
+                        };
+                    }
+                }
+            }
+        }).mount('#app');
     </script>
 </body>
 </html>
