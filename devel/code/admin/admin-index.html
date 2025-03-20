@@ -1,163 +1,153 @@
-我来帮你生成访客管理系统的前端代码。基于概要设计文档，我将使用 React + TypeScript 来实现。
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>访客管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .record-container {
+            margin: 30px auto;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">访客管理系统</a>
+        </div>
+    </nav>
 
-以下是主要的源代码结构:
+    <div class="container">
+        <div class="form-container">
+            <h4>访客登记</h4>
+            <form id="visitorForm">
+                <div class="mb-3">
+                    <label class="form-label">访客姓名</label>
+                    <input type="text" class="form-control" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">手机号码</label>
+                    <input type="tel" class="form-control" name="mobile" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">身份证号</label>
+                    <input type="text" class="form-control" name="idCard" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">人脸照片</label>
+                    <input type="file" class="form-control" name="faceImage" accept="image/*">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">来访目的</label>
+                    <textarea class="form-control" name="purpose" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">被访员工ID</label>
+                    <input type="number" class="form-control" name="employeeId" required>
+                </div>
+                <button type="submit" class="btn btn-primary">提交</button>
+            </form>
+        </div>
 
-```
-src/
-  |- components/
-     |- visitor/
-        |- VisitorRegister.tsx    // 访客注册
-        |- VisitorAppointment.tsx // 预约申请
-        |- VisitorStatus.tsx      // 状态查询
-     |- employee/ 
-        |- ApprovalList.tsx       // 审批列表
-        |- ApprovalDetail.tsx     // 审批详情
-     |- reception/
-        |- CheckIn.tsx           // 来访登记
-        |- CheckOut.tsx         // 离访登记
-        |- VisitRecords.tsx     // 记录查询
-  |- api/
-     |- visitor.ts     // 访客相关接口
-     |- employee.ts    // 员工相关接口  
-     |- reception.ts   // 前台相关接口
-  |- types/
-     |- index.ts      // 类型定义
-  |- utils/
-     |- request.ts    // 请求工具
-```
+        <div class="record-container">
+            <h4>访问记录查询</h4>
+            <div class="row mb-3">
+                <div class="col">
+                    <input type="date" class="form-control" id="startTime">
+                </div>
+                <div class="col">
+                    <input type="date" class="form-control" id="endTime">
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary" onclick="queryRecords()">查询</button>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>记录ID</th>
+                        <th>访客姓名</th>
+                        <th>被访员工</th>
+                        <th>来访时间</th>
+                        <th>离开时间</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody id="recordsTable"></tbody>
+            </table>
+        </div>
+    </div>
 
-我将生成这些文件并打包成zip。由于篇幅限制,我将分批展示关键代码:
+    <script>
+        document.getElementById('visitorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                const response = await fetch('/api/visitor/register', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if(result.code === 200) {
+                    alert('登记成功');
+                    getPassCode(result.data.visitorId);
+                } else {
+                    alert('登记失败：' + result.message);
+                }
+            } catch(error) {
+                alert('系统错误');
+            }
+        });
 
-1. 类型定义 (types/index.ts):
+        async function getPassCode(visitorId) {
+            try {
+                const response = await fetch(`/api/visitor/pass-code/${visitorId}`, {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                if(result.code === 200) {
+                    alert(`通行码: ${result.data.passCode}\n有效期至: ${result.data.expireTime}`);
+                }
+            } catch(error) {
+                alert('获取通行码失败');
+            }
+        }
 
-```typescript
-export interface Visitor {
-  id: string;
-  name: string;
-  phone: string;
-  idCard: string; 
-  company: string;
-  visitPurpose: string;
-  status: number;
-  createTime: string;
-  updateTime: string;
-}
-
-export interface Appointment {
-  id: string;
-  visitorId: string;
-  employeeId: string;
-  visitStartTime: string;
-  visitEndTime: string;
-  visitArea: string[];
-  status: number;
-  createTime: string;
-  updateTime: string;
-}
-
-export interface Employee {
-  id: string;
-  name: string;
-  phone: string;
-  email: string;
-  department: string;
-  building: string;
-}
-
-export interface VisitRecord {
-  id: string;
-  appointmentId: string;
-  actualStartTime: string;
-  actualEndTime: string;
-  status: number;
-  createTime: string;
-  updateTime: string;
-}
-```
-
-2. API 请求 (api/visitor.ts):
-
-```typescript
-import request from '../utils/request';
-import { Visitor, Appointment } from '../types';
-
-export const visitorAPI = {
-  // 访客注册
-  register: (data: Partial<Visitor>) => {
-    return request.post('/api/visitor/register', data);
-  },
-
-  // 预约申请
-  createAppointment: (data: Partial<Appointment>) => {
-    return request.post('/api/visitor/appointment', data);
-  },
-
-  // 查询状态
-  getStatus: (visitorId: string) => {
-    return request.get(`/api/visitor/status?id=${visitorId}`);
-  }
-};
-```
-
-3. 访客注册组件 (components/visitor/VisitorRegister.tsx):
-
-```typescript
-import React, { useState } from 'react';
-import { Form, Input, Button, message } from 'antd';
-import { visitorAPI } from '../../api/visitor';
-
-const VisitorRegister: React.FC = () => {
-  const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
-
-  const onFinish = async (values: any) => {
-    try {
-      setLoading(true);
-      await visitorAPI.register(values);
-      message.success('注册成功');
-      form.resetFields();
-    } catch (error) {
-      message.error('注册失败');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <Form form={form} onFinish={onFinish}>
-      <Form.Item name="name" rules={[{ required: true }]}>
-        <Input placeholder="姓名" />
-      </Form.Item>
-      <Form.Item name="phone" rules={[{ required: true }]}>
-        <Input placeholder="手机号" />
-      </Form.Item>
-      <Form.Item name="idCard" rules={[{ required: true }]}>
-        <Input placeholder="身份证号" />
-      </Form.Item>
-      <Form.Item name="company">
-        <Input placeholder="公司" />
-      </Form.Item>
-      <Form.Item name="visitPurpose" rules={[{ required: true }]}>
-        <Input.TextArea placeholder="来访目的" />
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit" loading={loading}>
-          提交
-        </Button>
-      </Form.Item>
-    </Form>
-  );
-};
-
-export default VisitorRegister;
-```
-
-这是核心代码的一部分。完整的代码包含更多组件和功能实现。由于篇幅限制不便完全展示。如果您需要查看特定部分的实现或有其他要求,请告诉我。
-
-要生成完整的zip包并转换为二进制,我需要知道:
-
-1. 是否需要包含其他依赖配置(package.json等)
-2. 是否需要包含样式文件
-3. 是否需要特定的代码规范配置
-
-请告诉我您的具体需求,我可以据此提供完整的代码包。
+        async function queryRecords() {
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+            
+            try {
+                const response = await fetch(`/api/visit/records?startTime=${startTime}&endTime=${endTime}`);
+                const result = await response.json();
+                if(result.code === 200) {
+                    const tbody = document.getElementById('recordsTable');
+                    tbody.innerHTML = result.data.map(record => `
+                        <tr>
+                            <td>${record.recordId}</td>
+                            <td>${record.visitorName}</td>
+                            <td>${record.employeeName}</td>
+                            <td>${record.visitTime}</td>
+                            <td>${record.leaveTime || '-'}</td>
+                            <td>${record.status === 0 ? '在访' : '已离开'}</td>
+                        </tr>
+                    `).join('');
+                }
+            } catch(error) {
+                alert('查询失败');
+            }
+        }
+    </script>
+</body>
+</html>
