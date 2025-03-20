@@ -1,120 +1,138 @@
-# 小鹏访客系统概要设计文档
+# 访客系统概要设计文档
 
-## 1. 数据模型设计
+## 1. 系统架构
 
-### 1.1 核心实体
-
-```sql
-# 访客信息(Visitor)
-- visitor_id: string (PK)
-- name: string
-- phone: string
-- id_card: string
-- company: string
-- status: int
-
-# 预约记录(Appointment)
-- appointment_id: string (PK)
-- visitor_id: string (FK)
-- host_id: string (FK) 
-- visit_time: datetime
-- leave_time: datetime
-- purpose: string
-- status: int
-
-# 员工信息(Employee)
-- employee_id: string (PK)
-- name: string
-- phone: string
-- department: string
-- email: string
-
-# 通行记录(Access)
-- access_id: string (PK)
-- visitor_id: string (FK)
-- area_id: string (FK)
-- access_time: datetime
-- access_type: int
+### 1.1 整体架构
+```
++----------------+     +----------------+     +----------------+
+|   客户端层     |     |    应用层      |     |    数据层      |
+|  Web/Mobile    | --> |  访客管理服务   | --> |   MySQL/Redis  |
++----------------+     +----------------+     +----------------+
 ```
 
-### 1.2 实体关系图(ER)
+## 2. 数据建模
 
+### 2.1 核心实体
+
+#### 访客(Visitor)
+```sql
+CREATE TABLE visitor (
+    visitor_id varchar(32) PRIMARY KEY,
+    name varchar(50),
+    mobile varchar(20),
+    id_card varchar(18),
+    face_id varchar(64),
+    status tinyint,
+    created_time datetime
+);
+```
+
+#### 预约单(Appointment)
+```sql
+CREATE TABLE appointment (
+    appointment_id varchar(32) PRIMARY KEY,
+    visitor_id varchar(32),
+    employee_id varchar(32),
+    visit_reason varchar(200),
+    visit_time datetime,
+    expire_time datetime,
+    status tinyint,
+    created_time datetime
+);
+```
+
+#### 员工(Employee)
+```sql
+CREATE TABLE employee (
+    employee_id varchar(32) PRIMARY KEY,
+    name varchar(50),
+    department varchar(50),
+    mobile varchar(20),
+    status tinyint
+);
+```
+
+### 2.2 实体关系图
 ```mermaid
 erDiagram
     Visitor ||--o{ Appointment : creates
     Employee ||--o{ Appointment : approves
-    Visitor ||--o{ Access : has
-    Area ||--o{ Access : contains
+    Visitor ||--o{ AccessRecord : has
+    AccessRecord }o--|| AccessPoint : at
 ```
 
-## 2. 核心流程时序图
+## 3. 核心流程
 
-### 2.1 访客预约流程
-
+### 3.1 访客预约流程
 ```mermaid
 sequenceDiagram
-    访客->>系统: 填写预约信息
-    系统->>受访人: 发送预约通知
-    受访人->>系统: 审批预约
-    系统->>访客: 发送预约结果
-    系统->>系统: 生成电子通行证
+    participant V as 访客
+    participant S as 系统
+    participant E as 员工
+    
+    V->>S: 提交预约申请
+    S->>E: 通知审批
+    E->>S: 审批结果
+    S->>V: 返回预约结果
+    S->>V: 生成预约码
 ```
 
-### 2.2 访客登记流程
-
-```mermaid
+### 3.2 访客登记流程
+```mermaid 
 sequenceDiagram
-    访客->>前台: 扫码登记
-    前台->>系统: 验证预约信息
-    系统->>门禁: 下发权限
-    系统->>访客: 发送通行码
-    系统->>受访人: 通知访客到达
+    participant V as 访客
+    participant K as 自助终端
+    participant S as 系统
+    
+    V->>K: 扫描身份证
+    K->>S: 身份信息验证
+    K->>V: 采集人脸
+    K->>S: 存储访客信息
+    S->>K: 打印访客证
 ```
 
-## 3. 接口设计
+## 4. 接口设计
 
-### 3.1 API接口
-```yaml
-/api/v1/appointment:
-  post:
-    summary: 创建预约
-  get:
-    summary: 查询预约
-
-/api/v1/visitor:
-  post:
-    summary: 访客登记
-  get:
-    summary: 查询访客信息
+### 4.1 访客预约接口
+```json
+POST /api/v1/appointment
+Request:
+{
+    "visitorName": "string",
+    "mobile": "string",
+    "employeeId": "string",
+    "visitReason": "string",
+    "visitTime": "datetime"
+}
 ```
 
-### 3.2 外部系统接口
-- 门禁系统接口
-- 短信通知接口
-- 停车场系统接口
-
-## 4. 技术架构
-
-### 4.1 系统架构图
-```
-前端层: Vue + Element UI
-服务层: Spring Boot
-数据层: MySQL + Redis
+### 4.2 访客验证接口
+```json
+POST /api/v1/visitor/verify
+Request:
+{
+    "appointmentId": "string",
+    "faceImage": "base64",
+    "idCard": "string"
+}
 ```
 
-### 4.2 部署架构
+## 5. 安全设计
+
+- 数据传输采用HTTPS加密
+- 访客敏感信息AES加密存储
+- 接口调用JWT认证
+- 数据库访问权限控制
+
+## 6. 部署架构
+
 ```
-负载均衡 -> 应用服务器集群 -> 数据库主从
+                 负载均衡
+                    |
+    +------------------------------+
+    |             |               |
+应用服务器1    应用服务器2    应用服务器3
+    |             |               |
+    +------------------------------+
+              数据库集群
 ```
-
-## 5. 安全方案
-
-- 数据传输: HTTPS + JWT
-- 数据存储: AES加密
-- 访问控制: RBAC权限模型
-
-## 6. 性能设计
-
-- 读写分离
-- 分布式缓存
-- 消息队列解耦
