@@ -1,127 +1,148 @@
-# B端官网系统概要设计文档 V4
+# 自行车销售网站概要设计文档
 
-## 1. 数据建模
+## 1. 数据结构设计
 
-### 1.1 核心实体
+### 1.1 产品表(Product)
 ```sql
--- 产品表
-Product {
-  id: int(pk)
-  name: varchar
-  description: text
-  category_id: int(fk) 
-  features: text
-  tech_specs: text
-  image_urls: json
-  sort: int
-  create_time: datetime
-  status: tinyint
-}
+CREATE TABLE product (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '产品ID',
+    name VARCHAR(100) NOT NULL COMMENT '产品名称',
+    category_id INT NOT NULL COMMENT '分类ID',
+    price DECIMAL(10,2) NOT NULL COMMENT '价格',
+    stock INT NOT NULL COMMENT '库存',
+    image_url VARCHAR(255) COMMENT '主图URL',
+    description TEXT COMMENT '产品描述',
+    status TINYINT DEFAULT 1 COMMENT '状态:1-上架,0-下架',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (category_id) REFERENCES category(id)
+);
+```
 
--- 解决方案表  
-Solution {
-  id: int(pk)
-  title: varchar
-  content: text
-  highlights: json
-  arch_diagram: varchar
-  industry_id: int(fk)
-  sort: int
-  create_time: datetime
-  status: tinyint
-}
+### 1.2 分类表(Category)
+```sql
+CREATE TABLE category (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '分类ID',
+    name VARCHAR(50) NOT NULL COMMENT '分类名称',
+    sort_order INT DEFAULT 0 COMMENT '排序',
+    icon_url VARCHAR(255) COMMENT '图标URL',
+    status TINYINT DEFAULT 1 COMMENT '状态:1-启用,0-禁用'
+);
+```
 
--- 行业表
-Industry {
-  id: int(pk)  
-  name: varchar
-  icon: varchar
-  sort: int
-  status: tinyint
-}
-
--- 客户案例表
-Case {
-  id: int(pk)
-  title: varchar
-  description: text
-  industry_id: int(fk)
-  solution_id: int(fk) 
-  logo: varchar
-  images: json
-  sort: int
-  create_time: datetime
-  status: tinyint
-}
-
--- 类别表
-Category {
-  id: int(pk)
-  name: varchar
-  icon: varchar
-  parent_id: int
-  sort: int 
-  status: tinyint
-}
+### 1.3 轮播图表(Banner)
+```sql
+CREATE TABLE banner (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '轮播图ID',
+    image_url VARCHAR(255) NOT NULL COMMENT '图片URL',
+    link_url VARCHAR(255) COMMENT '跳转链接',
+    sort_order INT DEFAULT 0 COMMENT '排序',
+    status TINYINT DEFAULT 1 COMMENT '状态:1-启用,0-禁用'
+);
 ```
 
 ## 2. 实体关系图
+
 ```mermaid
 erDiagram
-    Category ||--o{ Product : contains
-    Industry ||--o{ Solution : belongs
-    Industry ||--o{ Case : belongs  
-    Solution ||--o{ Case : includes
+    Product ||--|| Category : belongs_to
+    Product ||--o{ Banner : displays_in
+    Category ||--o{ Product : has_many
+    
+    Product {
+        bigint id
+        varchar name
+        int category_id
+        decimal price
+        int stock
+        varchar image_url
+    }
+    
+    Category {
+        int id
+        varchar name
+        int sort_order
+        varchar icon_url
+    }
+    
+    Banner {
+        int id
+        varchar image_url
+        varchar link_url
+        int sort_order
+    }
 ```
 
-## 3. 核心流程
+## 3. 首页加载时序图
 
-### 3.1 首页加载流程
 ```mermaid
 sequenceDiagram
     participant C as Client
-    participant F as Frontend  
-    participant B as Backend
-    participant D as Database
-
-    C->>F: 访问首页
-    F->>B: 请求首页数据
-    B->>D: 查询数据库
-    D-->>B: 返回数据
-    B-->>F: 返回首页数据
-    F-->>C: 渲染页面
+    participant S as Server
+    participant DB as Database
+    
+    C->>S: 请求首页数据
+    S->>DB: 查询轮播图数据
+    DB-->>S: 返回轮播图列表
+    S->>DB: 查询分类数据
+    DB-->>S: 返回分类列表
+    S->>DB: 查询热门商品
+    DB-->>S: 返回商品列表
+    S-->>C: 返回组装后的首页数据
+    C->>C: 渲染页面
 ```
 
-### 3.2 方案筛选流程
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant F as Frontend
-    participant B as Backend
-    participant D as Database
+## 4. 核心接口设计
 
-    C->>F: 选择行业
-    F->>B: 请求对应方案
-    B->>D: 条件查询 
-    D-->>B: 返回方案数据
-    B-->>F: 返回筛选结果
-    F-->>C: 更新页面
+### 4.1 获取首页数据
+```
+GET /api/home/index
+
+Response:
+{
+    "code": 200,
+    "data": {
+        "banners": [{
+            "id": 1,
+            "imageUrl": "string",
+            "linkUrl": "string"
+        }],
+        "categories": [{
+            "id": 1,
+            "name": "string",
+            "iconUrl": "string"
+        }],
+        "hotProducts": [{
+            "id": 1,
+            "name": "string",
+            "price": 0.00,
+            "imageUrl": "string"
+        }]
+    }
+}
 ```
 
-### 3.3 案例查看流程
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant F as Frontend
-    participant B as Backend
-    participant D as Database
+### 4.2 获取产品列表
+```
+GET /api/products
 
-    C->>F: 查看案例详情
-    F->>B: 获取案例信息
-    B->>D: 查询案例
-    D-->>B: 返回案例数据
-    B->>D: 关联查询方案
-    D-->>B: 返回关联数据
-    B-->>F: 返回完整信息
-    F-->>C: 展示案例详情
+Parameters:
+- categoryId: number
+- page: number
+- size: number
+
+Response:
+{
+    "code": 200,
+    "data": {
+        "total": 100,
+        "list": [{
+            "id": 1,
+            "name": "string",
+            "price": 0.00,
+            "imageUrl": "string",
+            "stock": 0
+        }]
+    }
+}
 ```
