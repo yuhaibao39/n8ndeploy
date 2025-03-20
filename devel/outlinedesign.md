@@ -1,67 +1,82 @@
-# 访客系统概要设计文档
+# 小鹏访客系统概要设计文档
 
 ## 1. 系统架构
 
-### 1.1 整体架构
+### 1.1 总体架构
 ```
-+----------------+     +----------------+     +----------------+
-|   客户端层     |     |    应用层      |     |    数据层      |
-|  Web/Mobile    | --> |  访客管理服务   | --> |   MySQL/Redis  |
-+----------------+     +----------------+     +----------------+
++----------------+    +----------------+    +----------------+
+|   访客端API    |    |   员工端API    |    |   管理端API    |
++----------------+    +----------------+    +----------------+
+         |                   |                    |
+         +-------------------+--------------------+
+                            |
+                    +----------------+
+                    |  业务服务层     |
+                    +----------------+
+                            |
+                    +----------------+
+                    |   数据存储层    |
+                    +----------------+
 ```
 
 ## 2. 数据建模
 
-### 2.1 核心实体
-
-#### 访客(Visitor)
-```sql
-CREATE TABLE visitor (
-    visitor_id varchar(32) PRIMARY KEY,
-    name varchar(50),
-    mobile varchar(20),
-    id_card varchar(18),
-    face_id varchar(64),
-    status tinyint,
-    created_time datetime
-);
-```
-
-#### 预约单(Appointment)
-```sql
-CREATE TABLE appointment (
-    appointment_id varchar(32) PRIMARY KEY,
-    visitor_id varchar(32),
-    employee_id varchar(32),
-    visit_reason varchar(200),
-    visit_time datetime,
-    expire_time datetime,
-    status tinyint,
-    created_time datetime
-);
-```
-
-#### 员工(Employee)
-```sql
-CREATE TABLE employee (
-    employee_id varchar(32) PRIMARY KEY,
-    name varchar(50),
-    department varchar(50),
-    mobile varchar(20),
-    status tinyint
-);
-```
-
-### 2.2 实体关系图
+### 2.1 实体关系图
 ```mermaid
 erDiagram
-    Visitor ||--o{ Appointment : creates
+    Visitor ||--o{ Appointment : makes
+    Visitor ||--o{ VisitorRecord : has
     Employee ||--o{ Appointment : approves
-    Visitor ||--o{ AccessRecord : has
-    AccessRecord }o--|| AccessPoint : at
+    Appointment ||--|{ AccessControl : generates
+    VisitorRecord ||--|| AccessControl : controls
+    
+    Visitor {
+        int visitor_id
+        string name
+        string phone
+        string id_card
+        string face_path
+        int status
+    }
+    
+    Appointment {
+        int appointment_id
+        int visitor_id
+        int employee_id
+        datetime visit_time
+        string purpose
+        int status
+    }
+    
+    Employee {
+        int employee_id
+        string name
+        string department
+        string phone
+        int role
+    }
+    
+    VisitorRecord {
+        int record_id
+        int visitor_id
+        datetime check_in
+        datetime check_out
+        string location
+    }
+    
+    AccessControl {
+        int access_id
+        int appointment_id
+        string auth_code
+        datetime valid_from
+        datetime valid_to
+    }
 ```
 
-## 3. 核心流程
+### 2.2 数据库表结构
+[核心表结构设计]
+
+## 3. 关键流程
 
 ### 3.1 访客预约流程
 ```mermaid
@@ -69,70 +84,53 @@ sequenceDiagram
     participant V as 访客
     participant S as 系统
     participant E as 员工
+    participant A as 门禁
     
     V->>S: 提交预约申请
-    S->>E: 通知审批
-    E->>S: 审批结果
+    S->>E: 发送审批通知
+    E->>S: 审批处理
     S->>V: 返回预约结果
-    S->>V: 生成预约码
+    S->>A: 生成门禁授权
 ```
 
 ### 3.2 访客登记流程
-```mermaid 
+```mermaid
 sequenceDiagram
     participant V as 访客
-    participant K as 自助终端
+    participant K as 登记终端
     participant S as 系统
+    participant A as 门禁系统
     
     V->>K: 扫描身份证
-    K->>S: 身份信息验证
-    K->>V: 采集人脸
-    K->>S: 存储访客信息
+    K->>S: 验证预约信息
+    K->>K: 采集人脸
+    K->>S: 提交登记信息
+    S->>A: 激活门禁权限
     S->>K: 打印访客证
 ```
 
 ## 4. 接口设计
 
-### 4.1 访客预约接口
-```json
-POST /api/v1/appointment
-Request:
-{
-    "visitorName": "string",
-    "mobile": "string",
-    "employeeId": "string",
-    "visitReason": "string",
-    "visitTime": "datetime"
-}
-```
-
-### 4.2 访客验证接口
-```json
-POST /api/v1/visitor/verify
-Request:
-{
-    "appointmentId": "string",
-    "faceImage": "base64",
-    "idCard": "string"
-}
-```
+### 4.1 API接口列表
+- /api/visitor/appointment
+- /api/visitor/register
+- /api/employee/approve
+- /api/access/verify
+[详细接口文档]
 
 ## 5. 安全设计
 
-- 数据传输采用HTTPS加密
-- 访客敏感信息AES加密存储
-- 接口调用JWT认证
-- 数据库访问权限控制
+### 5.1 数据安全
+- 传输加密：TLS 1.2
+- 存储加密：AES-256
+- 访问控制：RBAC模型
+
+### 5.2 身份认证
+- JWT令牌
+- 生物特征认证
+- 动态授权码
 
 ## 6. 部署架构
 
-```
-                 负载均衡
-                    |
-    +------------------------------+
-    |             |               |
-应用服务器1    应用服务器2    应用服务器3
-    |             |               |
-    +------------------------------+
-              数据库集群
-```
+### 6.1 系统部署图
+[部署架构图]
