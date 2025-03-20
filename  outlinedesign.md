@@ -1,4 +1,4 @@
-# B端官网系统概要设计文档 V3
+# B端官网系统概要设计文档 V4
 
 ## 1. 数据建模
 
@@ -82,19 +82,12 @@ sequenceDiagram
     participant C as Client
     participant F as Frontend  
     participant B as Backend
-    participant R as Redis
     participant D as Database
 
     C->>F: 访问首页
     F->>B: 请求首页数据
-    B->>R: 获取缓存数据
-    alt 缓存命中
-        R-->>B: 返回缓存
-    else 缓存未命中
-        B->>D: 查询数据库
-        D-->>B: 返回数据
-        B->>R: 写入缓存
-    end
+    B->>D: 查询数据库
+    D-->>B: 返回数据
     B-->>F: 返回首页数据
     F-->>C: 渲染页面
 ```
