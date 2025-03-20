@@ -3,188 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>访客系统</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.15.7/lib/theme-chalk/index.css">
+    <title>访客管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .container {
-            padding: 20px;
-        }
         .form-container {
             max-width: 600px;
-            margin: 0 auto;
+            margin: 30px auto;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <div id="app">
-        <el-container>
-            <el-header>
-                <h2>访客管理系统</h2>
-            </el-header>
-            
-            <el-main class="container">
-                <el-tabs v-model="activeTab">
-                    <el-tab-pane label="访客登记" name="register">
-                        <div class="form-container">
-                            <el-form :model="visitorForm" :rules="rules" ref="visitorForm" label-width="100px">
-                                <el-form-item label="访客姓名" prop="name">
-                                    <el-input v-model="visitorForm.name"></el-input>
-                                </el-form-item>
-                                <el-form-item label="手机号" prop="mobile">
-                                    <el-input v-model="visitorForm.mobile"></el-input>
-                                </el-form-item>
-                                <el-form-item label="身份证号" prop="idCard">
-                                    <el-input v-model="visitorForm.idCard"></el-input>
-                                </el-form-item>
-                                <el-form-item label="人脸照片">
-                                    <el-upload
-                                        action="/api/upload"
-                                        :on-success="handleUploadSuccess"
-                                        :before-upload="beforeUpload">
-                                        <el-button size="small" type="primary">点击上传</el-button>
-                                    </el-upload>
-                                </el-form-item>
-                                <el-form-item label="来访目的" prop="purpose">
-                                    <el-input type="textarea" v-model="visitorForm.purpose"></el-input>
-                                </el-form-item>
-                                <el-form-item label="被访员工" prop="employeeId">
-                                    <el-select v-model="visitorForm.employeeId" filterable placeholder="请选择">
-                                        <el-option
-                                            v-for="item in employees"
-                                            :key="item.id"
-                                            :label="item.name"
-                                            :value="item.id">
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item>
-                                <el-form-item>
-                                    <el-button type="primary" @click="submitForm('visitorForm')">提交</el-button>
-                                    <el-button @click="resetForm('visitorForm')">重置</el-button>
-                                </el-form-item>
-                            </el-form>
-                        </div>
-                    </el-tab-pane>
-                    
-                    <el-tab-pane label="访问记录" name="records">
-                        <el-form :inline="true" :model="searchForm">
-                            <el-form-item>
-                                <el-date-picker
-                                    v-model="searchForm.dateRange"
-                                    type="daterange"
-                                    range-separator="至"
-                                    start-placeholder="开始日期"
-                                    end-placeholder="结束日期">
-                                </el-date-picker>
-                            </el-form-item>
-                            <el-form-item>
-                                <el-button type="primary" @click="searchRecords">查询</el-button>
-                            </el-form-item>
-                        </el-form>
-                        
-                        <el-table :data="visitRecords">
-                            <el-table-column prop="visitorName" label="访客姓名"></el-table-column>
-                            <el-table-column prop="employeeName" label="被访员工"></el-table-column>
-                            <el-table-column prop="visitTime" label="来访时间"></el-table-column>
-                            <el-table-column prop="leaveTime" label="离开时间"></el-table-column>
-                            <el-table-column prop="status" label="状态">
-                                <template slot-scope="scope">
-                                    {{scope.row.status === 0 ? '在访' : '已离开'}}
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                    </el-tab-pane>
-                </el-tabs>
-            </el-main>
-        </el-container>
+    <div class="container">
+        <div class="form-container">
+            <h2 class="mb-4">访客登记</h2>
+            <form id="visitorForm">
+                <div class="mb-3">
+                    <label for="name" class="form-label">访客姓名</label>
+                    <input type="text" class="form-control" id="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">手机号</label>
+                    <input type="tel" class="form-control" id="phone" required>
+                </div>
+                <div class="mb-3">
+                    <label for="idCard" class="form-label">身份证号</label>
+                    <input type="text" class="form-control" id="idCard" required>
+                </div>
+                <div class="mb-3">
+                    <label for="purpose" class="form-label">来访目的</label>
+                    <textarea class="form-control" id="purpose" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="carNumber" class="form-label">车牌号</label>
+                    <input type="text" class="form-control" id="carNumber">
+                </div>
+                <div class="mb-3">
+                    <label for="employeeId" class="form-label">被访人</label>
+                    <select class="form-select" id="employeeId" required>
+                        <option value="">请选择被访人</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">提交</button>
+            </form>
+        </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
-    <script src="https://cdn.jsdelivr.net/npm/element-ui@2.15.7/lib/index.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        new Vue({
-            el: '#app',
-            data() {
-                return {
-                    activeTab: 'register',
-                    visitorForm: {
-                        name: '',
-                        mobile: '',
-                        idCard: '',
-                        faceImage: '',
-                        purpose: '',
-                        employeeId: ''
+        document.getElementById('visitorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                idCard: document.getElementById('idCard').value,
+                purpose: document.getElementById('purpose').value,
+                carNumber: document.getElementById('carNumber').value,
+                employeeId: document.getElementById('employeeId').value
+            };
+
+            try {
+                const response = await fetch('/api/visitor/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
                     },
-                    rules: {
-                        name: [
-                            { required: true, message: '请输入访客姓名', trigger: 'blur' }
-                        ],
-                        mobile: [
-                            { required: true, message: '请输入手机号', trigger: 'blur' },
-                            { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' }
-                        ],
-                        idCard: [
-                            { required: true, message: '请输入身份证号', trigger: 'blur' },
-                            { pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/, message: '请输入正确的身份证号', trigger: 'blur' }
-                        ],
-                        purpose: [
-                            { required: true, message: '请输入来访目的', trigger: 'blur' }
-                        ],
-                        employeeId: [
-                            { required: true, message: '请选择被访员工', trigger: 'change' }
-                        ]
-                    },
-                    employees: [],
-                    searchForm: {
-                        dateRange: []
-                    },
-                    visitRecords: []
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                if(result.code === 200) {
+                    alert('登记成功！');
+                    document.getElementById('visitorForm').reset();
+                } else {
+                    alert('登记失败：' + result.message);
                 }
-            },
-            created() {
-                this.getEmployees()
-            },
-            methods: {
-                getEmployees() {
-                    axios.get('/api/employees').then(response => {
-                        this.employees = response.data.data
-                    })
-                },
-                handleUploadSuccess(response) {
-                    this.visitorForm.faceImage = response.data
-                    this.$message.success('上传成功')
-                },
-                beforeUpload(file) {
-                    const isImage = file.type.startsWith('image/')
-                    if (!isImage) {
-                        this.$message.error('请上传图片文件')
-                    }
-                    return isImage
-                },
-                submitForm(formName) {
-                    this.$refs[formName].validate((valid) => {
-                        if (valid) {
-                            axios.post('/api/visitor/register', this.visitorForm).then(response => {
-                                this.$message.success('登记成功')
-                                this.resetForm(formName)
-                            })
-                        }
-                    })
-                },
-                resetForm(formName) {
-                    this.$refs[formName].resetFields()
-                },
-                searchRecords() {
-                    const params = {
-                        startTime: this.searchForm.dateRange[0],
-                        endTime: this.searchForm.dateRange[1]
-                    }
-                    axios.get('/api/visit/records', { params }).then(response => {
-                        this.visitRecords = response.data.data
-                    })
-                }
+            } catch(error) {
+                alert('系统错误，请稍后重试');
+                console.error(error);
             }
-        })
+        });
+
+        // 加载被访人列表
+        async function loadEmployees() {
+            try {
+                const response = await fetch('/api/employee/list');
+                const result = await response.json();
+                if(result.code === 200) {
+                    const select = document.getElementById('employeeId');
+                    result.data.forEach(employee => {
+                        const option = document.createElement('option');
+                        option.value = employee.id;
+                        option.textContent = `${employee.name} - ${employee.department}`;
+                        select.appendChild(option);
+                    });
+                }
+            } catch(error) {
+                console.error('加载被访人列表失败:', error);
+            }
+        }
+
+        loadEmployees();
     </script>
 </body>
 </html>
