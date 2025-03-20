@@ -1,37 +1,42 @@
-# B端官网系统概要设计文档 V2
+# B端官网系统概要设计文档 V3
 
-## 1. 技术架构
-```
-Frontend(React) -> Nginx -> Backend(Node.js) -> MySQL/Redis
-```
+## 1. 数据建模
 
-## 2. 数据建模
-
-### 2.1 核心实体 
+### 1.1 核心实体
 ```sql
 -- 产品表
 Product {
   id: int(pk)
   name: varchar
-  description: text 
-  category_id: int(fk)
-  image_url: varchar
+  description: text
+  category_id: int(fk) 
+  features: text
+  tech_specs: text
+  image_urls: json
   sort: int
   create_time: datetime
-  update_time: datetime
   status: tinyint
 }
 
--- 解决方案表
+-- 解决方案表  
 Solution {
   id: int(pk)
   title: varchar
-  industry: varchar
   content: text
-  architecture: text 
-  benefits: text
+  highlights: json
+  arch_diagram: varchar
+  industry_id: int(fk)
   sort: int
   create_time: datetime
+  status: tinyint
+}
+
+-- 行业表
+Industry {
+  id: int(pk)  
+  name: varchar
+  icon: varchar
+  sort: int
   status: tinyint
 }
 
@@ -40,21 +45,10 @@ Case {
   id: int(pk)
   title: varchar
   description: text
-  industry: varchar
-  solution_id: int(fk)
-  logo_url: varchar
-  sort: int 
-  create_time: datetime
-  status: tinyint
-}
-
--- 内容管理表
-Content {
-  id: int(pk)
-  type: varchar
-  title: varchar 
-  content: text
-  position: varchar
+  industry_id: int(fk)
+  solution_id: int(fk) 
+  logo: varchar
+  images: json
   sort: int
   create_time: datetime
   status: tinyint
@@ -64,89 +58,77 @@ Content {
 Category {
   id: int(pk)
   name: varchar
+  icon: varchar
   parent_id: int
-  sort: int
+  sort: int 
   status: tinyint
 }
 ```
 
-## 3. 实体关系图
+## 2. 实体关系图
 ```mermaid
 erDiagram
     Category ||--o{ Product : contains
+    Industry ||--o{ Solution : belongs
+    Industry ||--o{ Case : belongs  
     Solution ||--o{ Case : includes
-    Case }|--o{ Content : has
-    Product }|--o{ Content : has
 ```
 
-## 4. 核心流程
+## 3. 核心流程
 
-### 4.1 产品展示流程
+### 3.1 首页加载流程
 ```mermaid
 sequenceDiagram
     participant C as Client
-    participant F as Frontend
+    participant F as Frontend  
     participant B as Backend
-    participant D as Database
     participant R as Redis
-    
-    C->>F: 访问产品页
-    F->>B: 请求产品列表
-    B->>R: 查询缓存
+    participant D as Database
+
+    C->>F: 访问首页
+    F->>B: 请求首页数据
+    B->>R: 获取缓存数据
     alt 缓存命中
-        R-->>B: 返回缓存数据
+        R-->>B: 返回缓存
     else 缓存未命中
         B->>D: 查询数据库
-        D-->>B: 返回产品数据
+        D-->>B: 返回数据
         B->>R: 写入缓存
     end
-    B-->>F: 返回产品列表
-    F-->>C: 渲染产品页面
+    B-->>F: 返回首页数据
+    F-->>C: 渲染页面
 ```
 
-### 4.2 案例查询流程 
+### 3.2 方案筛选流程
 ```mermaid
 sequenceDiagram
     participant C as Client
     participant F as Frontend
     participant B as Backend
     participant D as Database
-    
-    C->>F: 选择筛选条件
-    F->>B: 请求案例列表
-    B->>D: 条件查询
+
+    C->>F: 选择行业
+    F->>B: 请求对应方案
+    B->>D: 条件查询 
+    D-->>B: 返回方案数据
+    B-->>F: 返回筛选结果
+    F-->>C: 更新页面
+```
+
+### 3.3 案例查看流程
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant F as Frontend
+    participant B as Backend
+    participant D as Database
+
+    C->>F: 查看案例详情
+    F->>B: 获取案例信息
+    B->>D: 查询案例
     D-->>B: 返回案例数据
-    B-->>F: 返回案例列表
-    F-->>C: 更新页面展示
-```
-
-## 5. API接口
-
-### 5.1 产品接口
-```
-GET /api/products - 获取产品列表
-GET /api/products/:id - 获取产品详情
-POST /api/products - 创建产品
-PUT /api/products/:id - 更新产品
-DELETE /api/products/:id - 删除产品
-```
-
-### 5.2 解决方案接口
-```
-GET /api/solutions - 获取解决方案列表
-GET /api/solutions/:id - 获取解决方案详情
-POST /api/solutions - 创建解决方案
-PUT /api/solutions/:id - 更新解决方案
-DELETE /api/solutions/:id - 删除解决方案
-```
-
-## 6. 部署架构
-```
-        [CDN]  
-          ↓
-    [负载均衡(Nginx)]
-          ↓
-  [Web服务器集群(Node.js)]
-          ↓
-   [Redis集群] [MySQL主从]
+    B->>D: 关联查询方案
+    D-->>B: 返回关联数据
+    B-->>F: 返回完整信息
+    F-->>C: 展示案例详情
 ```
