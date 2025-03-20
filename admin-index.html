@@ -1,134 +1,103 @@
-基于概要设计文档，生成对应的前端 Vue3 + TypeScript 源代码:
-
-```typescript
-// types/index.ts
-interface Banner {
-  id: number;
-  imageUrl: string;
-  linkUrl: string;
-}
-
-interface Category {
-  id: number;
-  name: string;
-  iconUrl: string;
-}
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  imageUrl: string;
-}
-
-interface HomeData {
-  banners: Banner[];
-  categories: Category[];
-  hotProducts: Product[];
-}
-
-// api/index.ts
-import axios from 'axios';
-
-export const getHomeData = () => {
-  return axios.get<HomeData>('/api/v1/home');
-}
-
-export const addToCart = (productId: number, quantity: number) => {
-  return axios.post('/api/v1/cart', { productId, quantity });
-}
-
-// components/BannerSlider.vue
-<template>
-  <el-carousel height="400px">
-    <el-carousel-item v-for="banner in banners" :key="banner.id">
-      <a :href="banner.linkUrl">
-        <img :src="banner.imageUrl" class="banner-img">
-      </a>
-    </el-carousel-item>
-  </el-carousel>
-</template>
-
-<script setup lang="ts">
-defineProps<{
-  banners: Banner[]
-}>();
-</script>
-
-// components/CategoryList.vue
-<template>
-  <div class="category-list">
-    <div v-for="category in categories" :key="category.id" class="category-item">
-      <img :src="category.iconUrl" class="category-icon">
-      <span>{{ category.name }}</span>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>访客管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">访客登记</h2>
+        <form id="visitorForm">
+            <div class="mb-3">
+                <label class="form-label">访客姓名</label>
+                <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">手机号码</label>
+                <input type="tel" class="form-control" id="phone" required pattern="[0-9]{11}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">身份证号</label>
+                <input type="text" class="form-control" id="idCard" required pattern="[0-9Xx]{18}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">人脸照片</label>
+                <input type="file" class="form-control" id="faceImage" accept="image/*">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">来访目的</label>
+                <textarea class="form-control" id="purpose" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">被访员工</label>
+                <select class="form-control" id="employeeId" required>
+                    <option value="">请选择</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">预计来访时间</label>
+                <input type="datetime-local" class="form-control" id="visitTime" required>
+            </div>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
     </div>
-  </div>
-</template>
 
-<script setup lang="ts">
-defineProps<{
-  categories: Category[]
-}>();
-</script>
+    <script>
+        document.getElementById('visitorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                idCard: document.getElementById('idCard').value,
+                faceImage: document.getElementById('faceImage').files[0],
+                purpose: document.getElementById('purpose').value,
+                employeeId: parseInt(document.getElementById('employeeId').value),
+                visitTime: document.getElementById('visitTime').value
+            };
 
-// components/ProductList.vue
-<template>
-  <div class="product-list">
-    <div v-for="product in products" :key="product.id" class="product-card">
-      <img :src="product.imageUrl" class="product-img">
-      <h3>{{ product.name }}</h3>
-      <p class="price">¥{{ product.price }}</p>
-      <el-button @click="addToCart(product.id)">加入购物车</el-button>
-    </div>
-  </div>
-</template>
+            try {
+                const response = await fetch('/api/visitor/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
 
-<script setup lang="ts">
-import { addToCart } from '../api';
+                const result = await response.json();
+                if (result.code === 200) {
+                    alert('登记成功');
+                    document.getElementById('visitorForm').reset();
+                } else {
+                    alert('登记失败：' + result.message);
+                }
+            } catch (error) {
+                alert('系统错误，请稍后重试');
+                console.error(error);
+            }
+        });
 
-defineProps<{
-  products: Product[]
-}>();
+        // 加载员工列表
+        async function loadEmployees() {
+            try {
+                const response = await fetch('/api/employees');
+                const result = await response.json();
+                const select = document.getElementById('employeeId');
+                result.data.forEach(employee => {
+                    const option = document.createElement('option');
+                    option.value = employee.id;
+                    option.textContent = `${employee.name} - ${employee.department}`;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('加载员工列表失败', error);
+            }
+        }
 
-const handleAddToCart = async (productId: number) => {
-  try {
-    await addToCart(productId, 1);
-    ElMessage.success('添加成功');
-  } catch (error) {
-    ElMessage.error('添加失败');
-  }
-};
-</script>
-
-// views/Home.vue
-<template>
-  <div class="home">
-    <BannerSlider :banners="homeData.banners" />
-    <CategoryList :categories="homeData.categories" />
-    <ProductList :products="homeData.hotProducts" />
-  </div>
-</template>
-
-<script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { getHomeData } from '../api';
-import BannerSlider from '../components/BannerSlider.vue';
-import CategoryList from '../components/CategoryList.vue';
-import ProductList from '../components/ProductList.vue';
-
-const homeData = ref<HomeData>({
-  banners: [],
-  categories: [],
-  hotProducts: []
-});
-
-onMounted(async () => {
-  try {
-    const { data } = await getHomeData();
-    homeData.value = data;
-  } catch (error) {
-    console.error('Failed to fetch home data:', error);
-  }
-});
-</script>
-```
+        loadEmployees();
+    </script>
+</body>
+</html>
